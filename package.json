@@ -1,0 +1,27 @@
+{
+  "name": "test-publish-to-cloudflare",
+  "version": "1.0.0",
+  "description": "Github action that runs the test command of a repository, generates the test coverage report, uploads the report to cloudflare pages and comments the results on available pull requests.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlosdevpereira/test-publish-to-cloudflare.git"
+  },
+  "keywords": [
+    "github",
+    "action",
+    "github action",
+    "node",
+    "cloudflare",
+    "pages",
+    "test",
+    "test coverage",
+    "jest"
+  ],
+  "author": "carlosdevpereira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carlosdevpereira/test-publish-to-cloudflare/issues"
+  },
+  "homepage": "https://github.com/carlosdevpereira/test-publish-to-cloudflare#readme"
+}
