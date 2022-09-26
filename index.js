@@ -116,13 +116,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      **/
     core.startGroup("Comment on available pull requests...");
     const octokit = github.getOctokit(input.githubToken);
-
-    const BRANCH_NAME = github.context.ref;
-    const BRANCH_COMMIT = commitShortHash;
     const UPLOAD_URL = `https://${commitShortHash}.${input.baseCloudflareDeploymentUrl}`;
-    core.info(`BRANCH_NAME: ${input.branchName}`);
-    core.info(`BRANCH_COMMIT: ${BRANCH_COMMIT}`);
-    core.info(`UPLOAD_URL: ${UPLOAD_URL}`);
 
     // Get coverage summary with retries
     const getCoverageSummary = async (
@@ -173,7 +167,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
     if (pulls.total_count > 0) {
       pulls.items.forEach(async (pull) => {
         // Get the existing comments.
-        const { data: pullRequest } = await github.rest.pulls.get({
+        const { data: pullRequest } = await octokit.rest.pulls.get({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           pull_number: pull.number,
@@ -227,7 +221,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         if (secondsTaken > 0) timeTaken += `${secondsTaken} seconds`;
 
         // Get the existing comments.
-        const { data: comments } = await github.rest.issues.listComments({
+        const { data: comments } = await octokit.rest.issues.listComments({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           issue_number: pullRequest.number,
@@ -326,19 +320,19 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         - Time: **${timeTaken}**
       </details>
 
-      > Coverage data is based on head **${input.branchName}** (\`${BRANCH_COMMIT}\`) compared to base **${pullRequest.base.ref}** (\`${shortBaseSha}\`).
+      > Coverage data is based on head **${input.branchName}** (\`${commitShortHash}\`) compared to base **${pullRequest.base.ref}** (\`${shortBaseSha}\`).
 
       [View full coverage report 🔗](${UPLOAD_URL})`;
 
         if (botComment) {
-          await github.rest.issues.updateComment({
+          await octokit.rest.issues.updateComment({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             comment_id: botComment.id,
             body: commentBody,
           });
         } else {
-          await github.rest.issues.createComment({
+          await octokit.rest.issues.createComment({
             issue_number: pullRequest.number,
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
