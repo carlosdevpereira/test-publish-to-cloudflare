@@ -239,12 +239,11 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
           }: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
         }
 
-        let coverageSummaryTable = `
-      \`\`\`diff
-      @@                             Coverage Summary                          @@
-         -----------------------------------------------------------------------
-        |   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
-        | ------------ | --------------- | ---------------- | ----------------- |`;
+        let coverageSummaryTable = `\`\`\`diff
+@@                             Coverage Summary                          @@
+-----------------------------------------------------------------------
+|   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
+| ------------ | --------------- | ---------------- | ----------------- |`;
 
         coverageSummaryTable += `\n${
           !baseResult || headTotals.statements.pct > baseTotals.statements.pct
@@ -302,19 +301,18 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
       ${coverageMessage}
 
       ${coverageSummaryTable}
-
-      <details>
-        <summary>Metrics</summary>
+<details>
+<summary>Metrics</summary>
         
-        - Test Suites: **${statistics.numPassedTestSuites} passed**, ${statistics.numTotalTestSuites} total
-        - Tests: **${statistics.numPassedTests} passed**, ${statistics.numTotalTests} total
-        - Snapshots: **${statistics.snapshot.total} total**
-        - Time: **${timeTaken}**
-      </details>
+- Test Suites: **${statistics.numPassedTestSuites} passed**, ${statistics.numTotalTestSuites} total
+- Tests: **${statistics.numPassedTests} passed**, ${statistics.numTotalTests} total
+- Snapshots: **${statistics.snapshot.total} total**
+- Time: **${timeTaken}**
+</details>
 
-      > Coverage data is based on head **${input.branchName}** (\`${commitShortHash}\`) compared to base **${pullRequest.base.ref}** (\`${shortBaseSha}\`).
+> Coverage data is based on head **${input.branchName}** (\`${commitShortHash}\`) compared to base **${pullRequest.base.ref}** (\`${shortBaseSha}\`).
 
-      [View full coverage report 🔗](${UPLOAD_URL})`;
+[View full coverage report 🔗](${UPLOAD_URL})`;
 
         if (botComment) {
           await octokit.rest.issues.updateComment({
