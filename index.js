@@ -239,7 +239,8 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
           }: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
         }
 
-        let coverageSummaryTable = `\`\`\`diff
+        let coverageSummaryTable = `
+\`\`\`diff
 @@                             Coverage Summary                          @@
 -----------------------------------------------------------------------
 |   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
@@ -297,10 +298,10 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         coverageSummaryTable += `\n  -------------------------------------------------------------------------\n\`\`\``;
 
         const commentBody = `## 🔖 Coverage Report
+${coverageMessage}
 
-      ${coverageMessage}
+${coverageSummaryTable}
 
-      ${coverageSummaryTable}
 <details>
 <summary>Metrics</summary>
         
