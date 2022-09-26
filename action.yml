@@ -12,7 +12,6 @@ runs:
 inputs:
   framework:
     description: "The test framework to run the unit tests of the repository. (Only 'jest' is available for now.)"
-    required: false
     default: "jest"
   githubToken:
     description: "The github token that will be used to comment the results on available pull requests."
@@ -28,7 +27,6 @@ inputs:
     required: true
   baseCloudflareDeploymentUrl:
     description: "The base URL configured on the target Cloudflare project from which the deployments will be served - It can also be a custom domain configured on the target project. (defaults to https://${cloudflareProjectName}.pages.dev)"
-    required: false
 
 outputs:
   coverage:

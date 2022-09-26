@@ -13,7 +13,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * the Github Action so that we can later use them
      **/
     const input = {
-      framework: core.getInput("framework", { required: false }),
+      framework: core.getInput("framework"),
       githubToken: core.getInput("githubToken", { required: true }),
       cloudflareProjectName: core.getInput("cloudflareProjectName", {
         required: true,
@@ -24,10 +24,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
       cloudflareAccountId: core.getInput("cloudflareAccountId", {
         required: true,
       }),
-      baseCloudflareDeploymentUrl: core.getInput(
-        "baseCloudflareDeploymentUrl",
-        { required: false }
-      ),
+      baseCloudflareDeploymentUrl: core.getInput("baseCloudflareDeploymentUrl"),
     };
 
     /**
