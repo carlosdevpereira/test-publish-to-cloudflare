@@ -17,6 +17,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
     const input = {
       framework: core.getInput("framework"),
       githubToken: core.getInput("githubToken", { required: true }),
+      branchName: core.getInput("branchName", { required: true }),
       cloudflareProjectName: core.getInput("cloudflareProjectName", {
         required: true,
       }),
@@ -114,14 +115,14 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * https://octokit.github.io/rest.js/v19
      **/
     core.startGroup("Comment on available pull requests...");
-    const octokit = new github.getOctokit(input.githubToken);
+    const octokit = github.getOctokit(input.githubToken);
 
     const BRANCH_NAME = github.context.ref;
     const BRANCH_COMMIT = commitShortHash;
     const UPLOAD_URL = `https://${commitShortHash}.${input.baseCloudflareDeploymentUrl}`;
-    core.info("BRANCH_NAME: ", BRANCH_NAME);
-    core.info("BRANCH_COMMIT: ", BRANCH_COMMIT);
-    core.info("UPLOAD_URL: ", UPLOAD_URL);
+    core.info(`BRANCH_NAME: ${input.branchName}`);
+    core.info(`BRANCH_COMMIT: ${BRANCH_COMMIT}`);
+    core.info(`UPLOAD_URL: ${UPLOAD_URL}`);
 
     // Get coverage summary with retries
     const getCoverageSummary = async (
@@ -163,12 +164,11 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
       }
     };
 
-    // Get open pull requests for $BRANCH_NAME
     const { data: pulls } = await octokit.rest.search.issuesAndPullRequests({
-      q: `is:pr state:open repo:${github.context.repo.owner}/${github.context.repo.repo} head:${BRANCH_NAME}`,
+      q: `is:pr state:open repo:${github.context.repo.owner}/${github.context.repo.repo} head:${input.branchName}`,
     });
 
-    core.info("Pull requests available: ", pulls);
+    core.info(`Pull requests available: ${JSON.stringify(pulls)}`);
 
     if (pulls.total_count > 0) {
       pulls.items.forEach(async (pull) => {
@@ -240,19 +240,17 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         if (headAvgPercentage > baseAvgPercentage) {
           coverageMessage = `\n> Wooo 🎉, the tests are passing and the coverage percentage **increased** with this pull request, well done! 👏\n> ${
             pullRequest.base.ref
-          }: **${Math.round(
-            baseAvgPercentage,
-            -1
-          )}%** | ${BRANCH_NAME}: **${Math.round(headAvgPercentage, -1)}%**`;
+          }: **${Math.round(baseAvgPercentage, -1)}%** | ${
+            input.branchName
+          }: **${Math.round(headAvgPercentage, -1)}%**`;
         } else if (headAvgPercentage === baseAvgPercentage) {
           coverageMessage = `\n> Good job 👌, the tests are passing and the coverage percentage remained intact.`;
         } else {
           coverageMessage = `\n> Tests are passing but the coverage percentage **is decreased** 😱 by this pull request, read coverage report below for more details.\n\n🔻 ${
             pullRequest.base.ref
-          }: **${Math.round(
-            baseAvgPercentage,
-            -1
-          )}%** | ${BRANCH_NAME}: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
+          }: **${Math.round(baseAvgPercentage, -1)}%** | ${
+            input.branchName
+          }: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
         }
 
         let coverageSummaryTable = `
@@ -328,7 +326,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         - Time: **${timeTaken}**
       </details>
 
-      > Coverage data is based on head **${BRANCH_NAME}** (\`${BRANCH_COMMIT}\`) compared to base **${pullRequest.base.ref}** (\`${shortBaseSha}\`).
+      > Coverage data is based on head **${input.branchName}** (\`${BRANCH_COMMIT}\`) compared to base **${pullRequest.base.ref}** (\`${shortBaseSha}\`).
 
       [View full coverage report 🔗](${UPLOAD_URL})`;
 
