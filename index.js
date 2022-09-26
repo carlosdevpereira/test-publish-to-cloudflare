@@ -47,13 +47,34 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * to use this action, feel free to open a feature request
      * in this repository 😉).
      **/
+    let testOutput = "";
+    let testErrors = "";
+
     if (input.framework === "jest") {
       core.startGroup("Running Jest Tests...");
       const JEST_PATH = "./node_modules/jest/bin/jest.js";
       const JEST_FLAGS = "--no-cache --detectOpenHandles --coverage --json";
       const RESULT_OUTPUT_FILE = `${COVERAGE_OUTPUT_FOLDER}/test-results.json`;
 
-      await exec(`echo $(${JEST_PATH} ${JEST_FLAGS}) > ${RESULT_OUTPUT_FILE}`);
+      await exec(`${JEST_PATH} ${JEST_FLAGS}`, undefined, {
+        listeners: {
+          stdout: (data) => {
+            testOutput += data.toString();
+          },
+          stderr: (data) => {
+            testErrors += data.toString();
+          },
+        },
+      });
+
+      if (testErrors !== "") {
+        core.error("Test errors: ", testErrors);
+        throw new Error(testErrors);
+      }
+
+      await exec(`echo "${testOutput}" > ${RESULT_OUTPUT_FILE}`);
+
+      core.info("Test output: ", testOutput);
       core.endGroup();
     }
 
@@ -66,7 +87,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
     const command = `git rev-parse --short ${github.context.sha}`;
     let commitShortHash = "";
     let commitShortCommandErrors = "";
-    await exec(command, {
+    await exec(command, undefined, {
       listeners: {
         stdout: (data) => {
           commitShortHash += data.toString();
@@ -78,7 +99,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
     });
 
     if (commitShortCommandErrors !== "") {
-      throw new Error(errors);
+      throw new Error(commitShortCommandErrors);
     }
 
     core.info("Calculated commit short hash: " + commitShortHash);
