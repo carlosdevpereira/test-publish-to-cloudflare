@@ -61,16 +61,8 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
           stdout: (data) => {
             testOutput += data.toString();
           },
-          stderr: (data) => {
-            testErrors += data.toString();
-          },
         },
       });
-
-      if (testErrors !== "") {
-        core.error("Test errors: ", testErrors);
-        throw new Error(testErrors);
-      }
 
       await exec(`echo "${testOutput}" > ${RESULT_OUTPUT_FILE}`);
 
