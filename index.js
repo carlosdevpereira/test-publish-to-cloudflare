@@ -47,7 +47,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * to use this action, feel free to open a feature request
      * in this repository 😉).
      **/
-    if (framework === "jest") {
+    if (input.framework === "jest") {
       core.startGroup("Running Jest Tests...");
       const JEST_PATH = "./node_modules/jest/bin/jest.js";
       const JEST_FLAGS = "--no-cache --detectOpenHandles --coverage --json";
