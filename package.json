@@ -1,6 +1,7 @@
 {
   "name": "test-publish-to-cloudflare",
   "version": "1.0.0",
+  "packageManager": "pnpm@7.11.0",
   "description": "Github action that runs the test command of a repository, generates the test coverage report, uploads the report to cloudflare pages and comments the results on available pull requests.",
   "main": "index.js",
   "repository": {
@@ -23,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/carlosdevpereira/test-publish-to-cloudflare/issues"
   },
-  "homepage": "https://github.com/carlosdevpereira/test-publish-to-cloudflare#readme"
+  "homepage": "https://github.com/carlosdevpereira/test-publish-to-cloudflare#readme",
+  "dependencies": {
+    "@actions/core": "^1.9.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^5.1.0"
+  }
 }

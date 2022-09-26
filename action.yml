@@ -7,10 +7,13 @@ runs:
   main: "index.js"
 
 inputs:
-  testCommand:
-    description: "The command used to run the unit tests of the repository (needs to be the explicit command and not an alias like `npm run test`)."
+  framework:
+    description: "The test framework to run the unit tests of the repository. (Only 'jest' is available for now.)"
     required: false
     default: "./node_modules/jest/bin/jest.js --no-cache --detectOpenHandles --coverage"
+  githubToken:
+    description: "The github token that will be used to comment the results on available pull requests."
+    required: true
   cloudflareProjectName:
     description: "The name of the project on Cloudflare that will receive the coverage report."
     required: true
@@ -19,9 +22,6 @@ inputs:
     required: true
   cloudflareAccountId:
     description: "The Account ID that will be used to upload the coverage report to Cloudflare."
-    required: true
-  githubToken:
-    description: "The github token that will be used to comment the results on available pull requests."
     required: true
   baseCloudflareDeploymentUrl:
     description: "The base URL configured on the target Cloudflare project from which the deployments will be served - It can also be a custom domain configured on the target project. (defaults to https://${cloudflareProjectName}.pages.dev)"
