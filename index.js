@@ -242,9 +242,9 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         let coverageSummaryTable = `
 \`\`\`diff
 @@                             Coverage Summary                          @@
------------------------------------------------------------------------
-|   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
-| ------------ | --------------- | ---------------- | ----------------- |`;
+   -----------------------------------------------------------------------
+  |   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
+  | ------------ | --------------- | ---------------- | ----------------- |`;
 
         coverageSummaryTable += `\n${
           !baseResult || headTotals.statements.pct > baseTotals.statements.pct
