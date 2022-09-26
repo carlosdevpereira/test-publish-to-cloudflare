@@ -67,7 +67,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
 
       fs.writeFileSync(RESULT_OUTPUT_FILE, testOutput);
 
-      core.info("Test output: ", testOutput);
+      core.debug("Test output: ", testOutput);
       core.endGroup();
     }
 
@@ -87,7 +87,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
       },
     });
 
-    core.info("Calculated commit short hash: " + commitShortHash);
+    core.debug("Calculated commit short hash: " + commitShortHash);
     core.endGroup();
 
     /**
@@ -113,11 +113,15 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * our requests. More information regarding Octokit here:
      * https://octokit.github.io/rest.js/v19
      **/
+    core.startGroup("Comment on available pull requests...");
     const octokit = new github.getOctokit(input.githubToken);
 
     const BRANCH_NAME = github.context.ref;
     const BRANCH_COMMIT = commitShortHash;
     const UPLOAD_URL = `https://${commitShortHash}.${input.baseCloudflareDeploymentUrl}`;
+    core.info("BRANCH_NAME: ", BRANCH_NAME);
+    core.info("BRANCH_COMMIT: ", BRANCH_COMMIT);
+    core.info("UPLOAD_URL: ", UPLOAD_URL);
 
     // Get coverage summary with retries
     const getCoverageSummary = async (
@@ -130,7 +134,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         if (retryCount === 0) {
           if (!ignoreErrors) throw error;
         } else {
-          console.warn("Cloudflare pages request failed. Retrying...");
+          core.warning("Cloudflare pages request failed. Retrying...");
           await new Promise((resolve) => setTimeout(resolve, 2000));
           return await getCoverageSummary(reportUrl, {
             retryCount: retryCount - 1,
@@ -145,12 +149,12 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
       { retryCount = 3, ignoreErrors = false } = {}
     ) => {
       try {
-        return await github.request(`${reportUrl}/test-results.json`);
+        return await octokit.request(`${reportUrl}/test-results.json`);
       } catch (error) {
         if (retryCount === 0) {
           if (!ignoreErrors) throw error;
         } else {
-          console.warn("Cloudflare pages request failed. Retrying...");
+          core.warning("Cloudflare pages request failed. Retrying...");
           await new Promise((resolve) => setTimeout(resolve, 2000));
           return await getCoverageSummary(reportUrl, {
             retryCount: retryCount - 1,
@@ -163,6 +167,8 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
     const { data: pulls } = await octokit.rest.search.issuesAndPullRequests({
       q: `is:pr state:open repo:${github.context.repo.owner}/${github.context.repo.repo} head:${BRANCH_NAME}`,
     });
+
+    core.info("Pull requests available: ", pulls);
 
     if (pulls.total_count > 0) {
       pulls.items.forEach(async (pull) => {
@@ -343,6 +349,8 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         }
       });
     }
+
+    core.endGroup();
   } catch (error) {
     core.setFailed(error.message);
   }
