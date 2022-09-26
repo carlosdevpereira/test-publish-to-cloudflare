@@ -2,6 +2,7 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const { exec } = require("@actions/exec");
 const fs = require("fs");
+const shellac = require("shellac");
 
 const SUPPORTED_TEST_FRAMEWORKS = ["jest"];
 const COVERAGE_OUTPUT_FOLDER = "./coverage";
@@ -95,11 +96,14 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * Cloudflare Pages.
      **/
     core.startGroup("Uploading to Cloudflare Pages...");
-    const cloudflareFlags = `CLOUDFLARE_API_TOKEN="${input.cloudflareApiToken}" CLOUDFLARE_ACCOUNT_ID="${input.cloudflareAccountId}"`;
-    const wranglerCommand = `npx wrangler@2 pages publish ${COVERAGE_OUTPUT_FOLDER}`;
-    const wranglerFlags = `--project-name="${input.cloudflareProjectName}" --branch="${commitShortHash}"`;
 
-    await exec(`${cloudflareFlags} ${wranglerCommand} ${wranglerFlags}`);
+    await shellac`
+    $ export CLOUDFLARE_API_TOKEN="${input.cloudflareApiToken}"
+    $ export CLOUDFLARE_ACCOUNT_ID="${input.cloudflareAccountId}"
+
+    $$ npx wrangler@2 pages publish "${COVERAGE_OUTPUT_FOLDER}" --project-name="${input.cloudflareProjectName}" --branch="${commitShortHash}"
+    `;
+
     core.endGroup();
   } catch (error) {
     core.setFailed(error.message);
