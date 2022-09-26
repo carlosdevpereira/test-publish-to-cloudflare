@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const { exec } = require("@actions/exec");
+const fs = require("fs");
 
 const SUPPORTED_TEST_FRAMEWORKS = ["jest"];
 const COVERAGE_OUTPUT_FOLDER = "./coverage";
@@ -48,7 +49,6 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      * in this repository 😉).
      **/
     let testOutput = "";
-    let testErrors = "";
 
     if (input.framework === "jest") {
       core.startGroup("Running Jest Tests...");
@@ -64,7 +64,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
         },
       });
 
-      await exec(`echo "${testOutput}" > ${RESULT_OUTPUT_FILE}`);
+      fs.writeFileSync(RESULT_OUTPUT_FILE, testOutput);
 
       core.info("Test output: ", testOutput);
       core.endGroup();
@@ -78,21 +78,13 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
 
     const command = `git rev-parse --short ${github.context.sha}`;
     let commitShortHash = "";
-    let commitShortCommandErrors = "";
     await exec(command, undefined, {
       listeners: {
         stdout: (data) => {
           commitShortHash += data.toString();
         },
-        stderr: (data) => {
-          commitShortCommandErrors += data.toString();
-        },
       },
     });
-
-    if (commitShortCommandErrors !== "") {
-      throw new Error(commitShortCommandErrors);
-    }
 
     core.info("Calculated commit short hash: " + commitShortHash);
     core.endGroup();
