@@ -78,15 +78,7 @@ const COVERAGE_OUTPUT_FOLDER = "./coverage";
      **/
     core.startGroup("Calculating commit short hash...");
 
-    const command = `git rev-parse --short ${github.context.sha}`;
-    let commitShortHash = "";
-    await exec(command, undefined, {
-      listeners: {
-        stdout: (data) => {
-          commitShortHash += data.toString();
-        },
-      },
-    });
+    let commitShortHash = github.context.sha.slice(0, 7);
 
     core.debug("Calculated commit short hash: " + commitShortHash);
     core.endGroup();
