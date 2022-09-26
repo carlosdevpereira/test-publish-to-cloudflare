@@ -1,8 +1,8 @@
-const core = require("@actions/core");
-const github = require("@actions/github");
-const { exec } = require("@actions/exec");
-const fs = require("fs");
-const shellac = require("shellac");
+import fs from "fs";
+import core from "@actions/core";
+import github from "@actions/github";
+import { exec } from "@actions/exec";
+import shellac from "shellac";
 
 const SUPPORTED_TEST_FRAMEWORKS = ["jest"];
 const COVERAGE_OUTPUT_FOLDER = "./coverage";
