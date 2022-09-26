@@ -13,7 +13,7 @@ inputs:
   framework:
     description: "The test framework to run the unit tests of the repository. (Only 'jest' is available for now.)"
     required: false
-    default: "./node_modules/jest/bin/jest.js --no-cache --detectOpenHandles --coverage"
+    default: "jest"
   githubToken:
     description: "The github token that will be used to comment the results on available pull requests."
     required: true
