@@ -1,7 +1,9 @@
 name: Test & Publish to Cloudflare
-icon: check-circle
 author: carlosdevpereira
 description: Generates a test coverage report, uploads it to Cloudflare and comments results on available pull requests.
+branding:
+  color: white
+  icon: check-circle
 
 runs:
   using: "node16"
