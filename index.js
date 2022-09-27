@@ -294,7 +294,9 @@ const getReport = async ({ reportUrl, retryCount = 3, ignoreErrors = false } = {
   try {
     const http = new HttpClient()
     const res = await http.get(reportUrl)
+    core.info('get report response: ', res)
     const body = await res.readBody()
+    core.info('get report response body JSON: ', JSON.parse(body))
 
     return JSON.parse(body)
   } catch (error) {
