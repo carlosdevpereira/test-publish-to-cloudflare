@@ -123,8 +123,8 @@ const COVERAGE_OUTPUT_FOLDER = './coverage';
         const shortBaseSha = pullRequest.base.sha.slice(0, 7)
 
         // Read current head results from disk
-        const coverageSummary = fs.readFileSync(`${COVERAGE_OUTPUT_FOLDER}/coverage-summary.json`, 'utf8')
-        core.info('coverage summary: ', coverageSummary)
+        const coverageSummary = await fs.readFileSync(`${COVERAGE_OUTPUT_FOLDER}/coverage-summary.json`)
+        core.info('coverage summary: ', JSON.stringify(coverageSummary))
         const headResult = JSON.parse(coverageSummary)
         core.info('head result: ', headResult)
         const headTotals = headResult.data.total
