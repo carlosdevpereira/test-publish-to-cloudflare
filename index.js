@@ -123,7 +123,7 @@ const COVERAGE_OUTPUT_FOLDER = './coverage';
         const shortBaseSha = pullRequest.base.sha.slice(0, 7)
 
         // Read current head results from disk
-        const headResult = JSON.parse(fs.readFileSync(`${UPLOAD_URL}/coverage-summary.json`, 'utf8'))
+        const headResult = JSON.parse(fs.readFileSync(`${COVERAGE_OUTPUT_FOLDER}/coverage-summary.json`, 'utf8'))
         const headTotals = headResult.data.total
         const headPercentages = [
           headTotals.lines.pct,
