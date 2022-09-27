@@ -124,7 +124,7 @@ const COVERAGE_OUTPUT_FOLDER = './coverage';
 
         // Read current head results from disk
         const headResult = await getReport({ reportUrl: `${UPLOAD_URL}/coverage-summary.json` })
-        const headTotals = headResult.data.total
+        const headTotals = headResult.total
         const headPercentages = [
           headTotals.lines.pct,
           headTotals.statements.pct,
@@ -147,7 +147,7 @@ const COVERAGE_OUTPUT_FOLDER = './coverage';
         let basePercentages = [0, 0, 0, 0]
         let baseAvgPercentage = 0
         if (baseResult) {
-          baseTotals = baseResult.data.total
+          baseTotals = baseResult.total
           basePercentages = [
             baseTotals.lines.pct,
             baseTotals.statements.pct,
