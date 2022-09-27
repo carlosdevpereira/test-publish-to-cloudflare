@@ -158,7 +158,7 @@ const COVERAGE_OUTPUT_FOLDER = './coverage';
             = basePercentages.reduce((a, b) => a + b, 0) / basePercentages.length
         }
 
-        statistics = statistics.data
+        statistics = JSON.parse(statistics).data
         const startedAt = statistics.startTime
         const endedAt = statistics.testResults[statistics.testResults.length - 1].endTime
         const timeTaken = getTimeTaken(startedAt, endedAt)
