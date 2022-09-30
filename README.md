@@ -71,7 +71,7 @@ jobs:
 
 - **cloudflareApiToken**: The API Token generated on Cloudflare. Ideally this token should be saved in the repository secrets and shoudn't be shared.
 
-- **cloudflareAccountId**: The Account ID of the Cloudflare account that matches the API Token passed in. This parameter should also be saves in a repository secret.
+- **cloudflareAccountId**: The Account ID of the Cloudflare account that matches the API Token passed in. This parameter should also be saved in a repository secret.
 
 - **cloudflareProjectName**: The name of the project on Cloudflare Pages that will receive the coverage reports.
 
