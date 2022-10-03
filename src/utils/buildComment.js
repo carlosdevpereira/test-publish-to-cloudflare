@@ -8,15 +8,15 @@ export function BuildCommentBody({
     branchName,
     headAvgPercentage,
     baseAvgPercentage
-  })
+  });
 
   const coverageSummaryTable = BuildCoverageSummaryTable({
     hasBaseResults,
     headTotals,
     baseTotals
-  })
+  });
 
-  const timeTaken = CalculateTimeTaken(testResults.startTime, testResults.testResults[testResults.testResults.length - 1].endTime)
+  const timeTaken = CalculateTimeTaken(testResults.startTime, testResults.testResults[testResults.testResults.length - 1].endTime);
 
   const commentBody = `## 🔖 Coverage Report
     ${coverageMessage}
@@ -34,33 +34,33 @@ export function BuildCommentBody({
     
     > Coverage data is based on head **${branchName}** (\`${headShortHash, baseShortHash}\`) compared to base **${baseRef}** (\`${baseShortHash}\`).
     
-    [View full coverage report 🔗](${fullReportUrl})`
+    [View full coverage report 🔗](${fullReportUrl})`;
 
-  return commentBody
+  return commentBody;
 }
 
 export function BuildCommentHeadMessage({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage
 }) {
-  let coverageMessage
+  let coverageMessage;
 
   if (headAvgPercentage > baseAvgPercentage) {
     coverageMessage = `\n> Wooo 🎉, the tests are passing and the coverage percentage **increased**, well done! 👏\n> ${
       baseRef
     }: **${Math.round(baseAvgPercentage, -1)}%** | ${
       branchName
-    }: **${Math.round(headAvgPercentage, -1)}%**`
+    }: **${Math.round(headAvgPercentage, -1)}%**`;
   } else if (headAvgPercentage === baseAvgPercentage) {
-    coverageMessage = '\n> Good job 👌, the tests are passing and the coverage percentage remained intact.'
+    coverageMessage = '\n> Good job 👌, the tests are passing and the coverage percentage remained intact.';
   } else {
     coverageMessage = `\n> Tests are passing but the coverage percentage **decreased** 😱, read coverage report below for more details.\n\n🔻 ${
       baseRef
     }: **${Math.round(baseAvgPercentage, -1)}%** | ${
       branchName
-    }: **${Math.round(headAvgPercentage, -1)}%** 🔻`
+    }: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
   }
 
-  return coverageMessage
+  return coverageMessage;
 }
 
 export function BuildCoverageSummaryTable({
@@ -71,7 +71,7 @@ export function BuildCoverageSummaryTable({
 @@                             Coverage Summary                          @@
    -----------------------------------------------------------------------
   |   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
-  | ------------ | --------------- | ---------------- | ----------------- |`
+  | ------------ | --------------- | ---------------- | ----------------- |`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.statements.pct > baseTotals.statements.pct
@@ -79,13 +79,13 @@ export function BuildCoverageSummaryTable({
       : baseTotals.statements.pct === headTotals.statements.pct
         ? ' '
         : '-'
-  } `
+  } `;
 
   coverageSummaryTable += `| Statements   |     ${
     hasBaseResults ? baseTotals.statements.pct.toString() + '%' : '   -  '
   }      |      ${headTotals.statements.pct}%      |       ${
     headTotals.statements.covered
-  }/${headTotals.statements.total}     |`
+  }/${headTotals.statements.total}     |`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.branches.pct > baseTotals.branches.pct
@@ -93,13 +93,13 @@ export function BuildCoverageSummaryTable({
       : baseTotals.branches.pct === headTotals.branches.pct
         ? ' '
         : '-'
-  } `
+  } `;
 
   coverageSummaryTable += `| Branches     |     ${
     hasBaseResults ? baseTotals.branches.pct.toString() + '%' : '   -  '
   }      |      ${headTotals.branches.pct}%      |       ${
     headTotals.branches.covered
-  }/${headTotals.branches.total}     |`
+  }/${headTotals.branches.total}     |`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.functions.pct > baseTotals.functions.pct
@@ -107,13 +107,13 @@ export function BuildCoverageSummaryTable({
       : baseTotals.functions.pct === headTotals.functions.pct
         ? ' '
         : '-'
-  } `
+  } `;
 
   coverageSummaryTable += `| Functions    |     ${
     hasBaseResults ? baseTotals.functions.pct.toString() + '%' : '   -  '
   }      |      ${headTotals.functions.pct}%      |       ${
     headTotals.functions.covered
-  }/${headTotals.functions.total}     |`
+  }/${headTotals.functions.total}     |`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.lines.pct > baseTotals.lines.pct
@@ -121,29 +121,29 @@ export function BuildCoverageSummaryTable({
       : baseTotals.lines.pct === headTotals.lines.pct
         ? ' '
         : '-'
-  } `
+  } `;
 
   coverageSummaryTable += `| Lines        |     ${
     hasBaseResults ? baseTotals.lines.pct.toString() + '%' : '   -  '
   }      |      ${headTotals.lines.pct}%      |       ${
     headTotals.lines.covered
-  }/${headTotals.lines.total}     |`
+  }/${headTotals.lines.total}     |`;
 
-  coverageSummaryTable += '\n  -------------------------------------------------------------------------\n```'
+  coverageSummaryTable += '\n  -------------------------------------------------------------------------\n```';
 
-  return coverageSummaryTable
+  return coverageSummaryTable;
 }
 
 export function CalculateTimeTaken(startedAt, endedAt) {
-  const msDifference = endedAt - startedAt
-  const secondsTaken = Math.floor(msDifference / 1000)
-  const minutesTaken = Math.floor(msDifference / 1000 / 60)
-  const hoursTaken = Math.floor(msDifference / 1000 / 60 / 60)
+  const msDifference = endedAt - startedAt;
+  const secondsTaken = Math.floor(msDifference / 1000);
+  const minutesTaken = Math.floor(msDifference / 1000 / 60);
+  const hoursTaken = Math.floor(msDifference / 1000 / 60 / 60);
 
-  let timeTaken = ''
-  if (hoursTaken > 0) timeTaken = `${hoursTaken} hours, `
-  if (minutesTaken > 0) timeTaken += `${minutesTaken} minutes and `
-  if (secondsTaken > 0) timeTaken += `${secondsTaken} seconds`
+  let timeTaken = '';
+  if (hoursTaken > 0) timeTaken = `${hoursTaken} hours, `;
+  if (minutesTaken > 0) timeTaken += `${minutesTaken} minutes and `;
+  if (secondsTaken > 0) timeTaken += `${secondsTaken} seconds`;
 
-  return timeTaken
+  return timeTaken;
 }

@@ -1,24 +1,24 @@
-import { HttpClient } from '@actions/http-client'
-import core from '@actions/core'
+import { HttpClient } from '@actions/http-client';
+import core from '@actions/core';
 
 export default async function GetReport({ reportUrl, retryCount = 3, ignoreErrors = false } = {}) {
   try {
-    const http = new HttpClient()
-    const res = await http.get(reportUrl)
-    const body = await res.readBody()
+    const http = new HttpClient();
+    const res = await http.get(reportUrl);
+    const body = await res.readBody();
 
-    return JSON.parse(body)
+    return JSON.parse(body);
   } catch (error) {
     if (retryCount === 0) {
-      if (!ignoreErrors) throw error
+      if (!ignoreErrors) throw error;
     } else {
-      core.warning('Cloudflare pages request failed. Retrying...')
-      await new Promise(resolve => setTimeout(resolve, 2500))
+      core.warning('Cloudflare pages request failed. Retrying...');
+      await new Promise(resolve => setTimeout(resolve, 2500));
 
       return await GetReport({
         reportUrl,
         retryCount: retryCount - 1
-      })
+      });
     }
   }
 }
@@ -29,7 +29,7 @@ export function TotalPercentagesAverage(report) {
     report.total.statements.pct,
     report.total.functions.pct,
     report.total.branches.pct
-  ]
+  ];
 
-  return (percentages.reduce((a, b) => a + b, 0) / percentages.length)
+  return (percentages.reduce((a, b) => a + b, 0) / percentages.length);
 }

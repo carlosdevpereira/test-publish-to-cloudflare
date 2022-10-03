@@ -1,9 +1,9 @@
-import fs from 'fs'
-import core from '@actions/core'
-import { exec } from '@actions/exec'
+import fs from 'fs';
+import core from '@actions/core';
+import { exec } from '@actions/exec';
 
-const SUPPORTED_TEST_FRAMEWORKS = ['jest']
-const COVERAGE_OUTPUT_FOLDER = './coverage'
+const SUPPORTED_TEST_FRAMEWORKS = ['jest'];
+const COVERAGE_OUTPUT_FOLDER = './coverage';
 
 /**
  * Represents a testing framework
@@ -13,11 +13,11 @@ export default class Framework {
     if (!SUPPORTED_TEST_FRAMEWORKS.includes(frameworkName)) {
       throw new Error(
         'Unsupported test framework selected. Valid options are: ' + SUPPORTED_TEST_FRAMEWORKS.join(', ')
-      )
+      );
     }
 
-    this.name = frameworkName
-    this.testResults = ''
+    this.name = frameworkName;
+    this.testResults = '';
   }
 
   /**
@@ -28,26 +28,26 @@ export default class Framework {
    * in this repository 😉).
    **/
   async runTests() {
-    core.startGroup('Running Jest Tests...')
+    core.startGroup('Running Jest Tests...');
 
-    const JEST_PATH = './node_modules/jest/bin/jest.js'
-    const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json'
-    const RESULT_OUTPUT_FILE = `${COVERAGE_OUTPUT_FOLDER}/test-results.json`
+    const JEST_PATH = './node_modules/jest/bin/jest.js';
+    const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json';
+    const RESULT_OUTPUT_FILE = `${COVERAGE_OUTPUT_FOLDER}/test-results.json`;
 
-    let results = ''
+    let results = '';
     await exec(`${JEST_PATH} ${JEST_FLAGS}`, undefined, {
       listeners: {
         stdout: data => {
-          results += data.toString()
+          results += data.toString();
         }
       }
-    })
+    });
 
-    fs.writeFileSync(RESULT_OUTPUT_FILE, results)
-    this.testResults = JSON.parse(results)
+    fs.writeFileSync(RESULT_OUTPUT_FILE, results);
+    this.testResults = JSON.parse(results);
 
-    core.endGroup()
+    core.endGroup();
 
-    return this.testResults
+    return this.testResults;
   }
 }

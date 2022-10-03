@@ -3,8 +3,8 @@
  */
 export default class Commit {
   constructor(hash, repository) {
-    this.hash = hash
-    this.repository = repository
+    this.hash = hash;
+    this.repository = repository;
   }
 
   /**
@@ -12,6 +12,6 @@ export default class Commit {
      * (The first 7 characters)
      */
   shortHash() {
-    return this.hash.slice(0, 7)
+    return this.hash.slice(0, 7);
   }
 }

@@ -14,7 +14,7 @@
   },
   "extends": ["eslint:recommended"],
   "rules": {
-    "semi": ["warn", "never"],
+    "semi": ["warn", "always"],
     "quotes": ["warn", "single"],
     "indent": ["warn", 2],
     "no-console": "warn",
