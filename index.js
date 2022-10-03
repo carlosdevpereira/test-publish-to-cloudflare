@@ -8,8 +8,8 @@ import GithubAction from './src/index'
     const Action = new GithubAction(github.context)
 
     await Action.runTests()
-      .publishToCloudflare()
-      .commentOnAvailablePullRequests()
+    await Action.publishToCloudflare()
+    await Action.commentOnAvailablePullRequests()
 
   } catch (error) {
     core.setFailed(error.message)
