@@ -5,8 +5,9 @@ import GithubAction from './src/index'
 // 🚀 Execute Github Action
 (async () => {
   try {
-    await new GithubAction(github.context)
-      .runTests()
+    const Action = new GithubAction(github.context)
+
+    await Action.runTests()
       .publishToCloudflare()
       .commentOnAvailablePullRequests()
 
