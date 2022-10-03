@@ -1,6 +1,6 @@
 import core from '@actions/core'
 import github from '@actions/github'
-import GithubAction from './src'
+import GithubAction from './src/index'
 
 // 🚀 Execute Github Action
 (async () => {
