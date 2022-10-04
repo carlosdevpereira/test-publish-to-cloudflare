@@ -1,39 +1,41 @@
-import Commit from './Commit';
-import Cloudflare from './Cloudflare';
-import Repository from './Repository';
+import core from '@actions/core';
+import github from '@actions/github';
+import GithubAction from './Action';
 
-export default class GithubAction {
-  constructor(context, config) {
-    this.context = context;
-    this.config = config;
-
-    this.repository = new Repository(context.repo.repo, context.repo.owner);
-    this.commit = new Commit(context.sha, this.repository);
-
-    this.testResults = null;
-    this.coverageReportUrl = null;
-  }
-
-  async runTests() {
-    this.testResults = await this.repository.testFramework.runTests();
-
-    return this;
-  }
-
-  async publishToCloudflare() {
-    const cloudflare = new Cloudflare(this.config.cloudflare);
-    this.coverageReportUrl = await cloudflare.publish(this.commit.shortHash());
-
-    return this;
-  }
-
-  async commentOnAvailablePullRequests() {
-    const pullRequests = await this.repository.getPullRequests();
-
-    pullRequests.forEach(async pullRequest => {
-      await this.repository.commentPullRequests(pullRequest, this.testResults, this.coverageReportUrl);
+async function run () {
+  try {
+    const Action = new GithubAction(github.context, {
+      testing: {
+        framework: core.getInput('framework')
+      },
+      github: {
+        token: core.getInput('githubToken', { required: true }),
+        branch: core.getInput('branchName', { required: true })
+      },
+      cloudflare: {
+        projectName: core.getInput('cloudflareProjectName', { required: true }),
+        apiToken: core.getInput('cloudflareApiToken', { required: true }),
+        accountId: core.getInput('cloudflareAccountId', { required: true }),
+        baseUrl: core.getInput('baseCloudflareDeploymentUrl')
+      }
     });
 
-    return this;
+    core.startGroup('Running Jest Tests...');
+    await Action.runTests();
+    core.endGroup();
+
+    core.startGroup('Uploading to Cloudflare Pages...');
+    await Action.publishToCloudflare();
+    core.endGroup();
+
+    core.startGroup('Comment on available Pull Requests...');
+    await Action.commentOnAvailablePullRequests();
+    core.endGroup();
+
+  } catch (error) {
+    core.setFailed(error.message);
   }
 }
+
+// 🚀 Execute Github Action
+run();
