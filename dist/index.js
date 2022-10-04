@@ -12061,49 +12061,33 @@ var src_default = shellac;
 ;// CONCATENATED MODULE: ./src/Cloudflare.js
 
 
-
 const COVERAGE_OUTPUT_FOLDER = './coverage';
 
 class Cloudflare {
   constructor(config) {
-    this.token = config.token;
+    this.apiToken = config.apiToken;
     this.accountId = config.accountId;
     this.projectName = config.projectName;
-    this.baseUrl = config.baseCloudflareDeploymentUrl;
+    this.baseUrl = config.baseUrl;
   }
 
   async publish(commitSha) {
-
-    core_default().startGroup('Uploading to Cloudflare Pages...');
-
     await src_default`
-    $ export CLOUDFLARE_API_TOKEN="${this.token}"
+    $ export CLOUDFLARE_API_TOKEN="${this.apiToken}"
     $ export CLOUDFLARE_ACCOUNT_ID="${this.accountId}"
 
     $$ npx wrangler@2 pages publish "${COVERAGE_OUTPUT_FOLDER}" --project-name="${this.projectName}" --branch="${commitSha}"
     `;
 
-    core_default().endGroup();
-
     return `https://${commitSha}.${this.baseUrl}`;
   }
 }
-;// CONCATENATED MODULE: ./src/config/cloudflare.js
-
-
-/* harmony default export */ const config_cloudflare = ({
-  cloudflareProjectName: core_default().getInput('cloudflareProjectName', { required: true }),
-  cloudflareApiToken: core_default().getInput('cloudflareApiToken', { required: true }),
-  cloudflareAccountId: core_default().getInput('cloudflareAccountId', { required: true }),
-  baseCloudflareDeploymentUrl: core_default().getInput('baseCloudflareDeploymentUrl')
-});
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __nccwpck_require__(7147);
 var external_fs_default = /*#__PURE__*/__nccwpck_require__.n(external_fs_);
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(1514);
 ;// CONCATENATED MODULE: ./src/Framework.js
-
 
 
 
@@ -12133,8 +12117,6 @@ class Framework {
    * in this repository 😉).
    **/
   async runTests() {
-    core_default().startGroup('Running Jest Tests...');
-
     const JEST_PATH = './node_modules/jest/bin/jest.js';
     const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json';
     const RESULT_OUTPUT_FILE = `${Framework_COVERAGE_OUTPUT_FOLDER}/test-results.json`;
@@ -12151,24 +12133,9 @@ class Framework {
     external_fs_default().writeFileSync(RESULT_OUTPUT_FILE, results);
     this.testResults = JSON.parse(results);
 
-    core_default().endGroup();
-
     return this.testResults;
   }
 }
-;// CONCATENATED MODULE: ./src/config/framework.js
-
-
-/* harmony default export */ const framework = ({
-  framework: core_default().getInput('framework')
-});
-;// CONCATENATED MODULE: ./src/config/github.js
-
-
-/* harmony default export */ const config_github = ({
-  token: core_default().getInput('githubToken', { required: true }),
-  branch: core_default().getInput('branchName', { required: true })
-});
 // EXTERNAL MODULE: ./node_modules/@actions/http-client/lib/index.js
 var lib = __nccwpck_require__(6255);
 ;// CONCATENATED MODULE: ./src/utils/getReports.js
@@ -12363,20 +12330,18 @@ function CalculateTimeTaken(startedAt, endedAt) {
 
 
 
-
-
-
-
 /**
  * Represents a Github repository
  */
 class Repository {
-  constructor(name, owner) {
+  constructor(name, owner, config) {
     this.name = name;
     this.owner = owner;
-    this.branch = config_github.branch;
-    this.github = github_default().getOctokit(config_github.token);
-    this.testFramework = new Framework(framework.framework);
+    this.config = config;
+
+    this.branch = this.config.github.branch;
+    this.github = github_default().getOctokit(this.config.github.token);
+    this.testFramework = new Framework(this.config.testing.framework);
   }
 
   async getPullRequests() {
@@ -12406,8 +12371,6 @@ class Repository {
   }
 
   async commentPullRequest(pullRequest, testResults, fullReportUrl) {
-    core_default().startGroup('Comment on Pull Request or Commit...');
-
     const { data: comments } = await this.github.rest.issues.listComments({
       owner: this.owner,
       repo: this.repo,
@@ -12418,7 +12381,7 @@ class Repository {
     const headResult = await GetReport({ reportUrl: `${fullReportUrl}/coverage-summary.json` });
     const baseResult = await GetReport(
       {
-        reportUrl: `https://${pullRequest.baseBranchShortSha}.${config_cloudflare.baseCloudflareDeploymentUrl}/coverage-summary.json`,
+        reportUrl: `https://${pullRequest.baseBranchShortSha}.${this.config.cloudflare.baseUrl}/coverage-summary.json`,
         retryCount: 0,
         ignoreErrors: true
       }
@@ -12453,8 +12416,6 @@ class Repository {
         body: commentBody
       });
     }
-
-    core_default().endGroup();
   }
 }
 ;// CONCATENATED MODULE: ./src/index.js
@@ -12462,10 +12423,11 @@ class Repository {
 
 
 
-
 class GithubAction {
-  constructor(context) {
+  constructor(context, config) {
     this.context = context;
+    this.config = config;
+
     this.repository = new Repository(context.repo.repo, context.repo.owner);
     this.commit = new Commit(context.sha, this.repository);
 
@@ -12480,7 +12442,7 @@ class GithubAction {
   }
 
   async publishToCloudflare() {
-    const cloudflare = new Cloudflare(config_cloudflare);
+    const cloudflare = new Cloudflare(this.config.cloudflare);
     this.coverageReportUrl = await cloudflare.publish(this.commit.shortHash());
 
     return this;
@@ -12504,11 +12466,33 @@ class GithubAction {
 // 🚀 Execute Github Action
 (async () => {
   try {
-    const Action = new GithubAction((github_default()).context);
+    const Action = new GithubAction((github_default()).context, {
+      testing: {
+        framework: core_default().getInput('framework')
+      },
+      github: {
+        token: core_default().getInput('githubToken', { required: true }),
+        branch: core_default().getInput('branchName', { required: true })
+      },
+      cloudflare: {
+        projectName: core_default().getInput('cloudflareProjectName', { required: true }),
+        apiToken: core_default().getInput('cloudflareApiToken', { required: true }),
+        accountId: core_default().getInput('cloudflareAccountId', { required: true }),
+        baseUrl: core_default().getInput('baseCloudflareDeploymentUrl')
+      }
+    });
 
+    core_default().startGroup('Running Jest Tests...');
     await Action.runTests();
+    core_default().endGroup();
+
+    core_default().startGroup('Uploading to Cloudflare Pages...');
     await Action.publishToCloudflare();
+    core_default().endGroup();
+
+    core_default().startGroup('Comment on available Pull Requests...');
     await Action.commentOnAvailablePullRequests();
+    core_default().endGroup();
 
   } catch (error) {
     core_default().setFailed(error.message);

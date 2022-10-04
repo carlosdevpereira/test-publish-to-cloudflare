@@ -1,9 +1,5 @@
-import core from '@actions/core';
 import github from '@actions/github';
 import Framework from './Framework';
-import frameworkConfig from './config/framework';
-import githubConfig from './config/github';
-import cloudflareConfig from './config/cloudflare';
 import GetReport, { TotalPercentagesAverage } from './utils/getReports';
 import { BuildCommentBody } from './utils/buildComment';
 
@@ -11,12 +7,14 @@ import { BuildCommentBody } from './utils/buildComment';
  * Represents a Github repository
  */
 export default class Repository {
-  constructor(name, owner) {
+  constructor(name, owner, config) {
     this.name = name;
     this.owner = owner;
-    this.branch = githubConfig.branch;
-    this.github = github.getOctokit(githubConfig.token);
-    this.testFramework = new Framework(frameworkConfig.framework);
+    this.config = config;
+
+    this.branch = this.config.github.branch;
+    this.github = github.getOctokit(this.config.github.token);
+    this.testFramework = new Framework(this.config.testing.framework);
   }
 
   async getPullRequests() {
@@ -46,8 +44,6 @@ export default class Repository {
   }
 
   async commentPullRequest(pullRequest, testResults, fullReportUrl) {
-    core.startGroup('Comment on Pull Request or Commit...');
-
     const { data: comments } = await this.github.rest.issues.listComments({
       owner: this.owner,
       repo: this.repo,
@@ -58,7 +54,7 @@ export default class Repository {
     const headResult = await GetReport({ reportUrl: `${fullReportUrl}/coverage-summary.json` });
     const baseResult = await GetReport(
       {
-        reportUrl: `https://${pullRequest.baseBranchShortSha}.${cloudflareConfig.baseCloudflareDeploymentUrl}/coverage-summary.json`,
+        reportUrl: `https://${pullRequest.baseBranchShortSha}.${this.config.cloudflare.baseUrl}/coverage-summary.json`,
         retryCount: 0,
         ignoreErrors: true
       }
@@ -93,7 +89,5 @@ export default class Repository {
         body: commentBody
       });
     }
-
-    core.endGroup();
   }
 }

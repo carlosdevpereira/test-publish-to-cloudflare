@@ -1,5 +1,4 @@
 import fs from 'fs';
-import core from '@actions/core';
 import { exec } from '@actions/exec';
 
 const SUPPORTED_TEST_FRAMEWORKS = ['jest'];
@@ -28,8 +27,6 @@ export default class Framework {
    * in this repository 😉).
    **/
   async runTests() {
-    core.startGroup('Running Jest Tests...');
-
     const JEST_PATH = './node_modules/jest/bin/jest.js';
     const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json';
     const RESULT_OUTPUT_FILE = `${COVERAGE_OUTPUT_FOLDER}/test-results.json`;
@@ -45,8 +42,6 @@ export default class Framework {
 
     fs.writeFileSync(RESULT_OUTPUT_FILE, results);
     this.testResults = JSON.parse(results);
-
-    core.endGroup();
 
     return this.testResults;
   }

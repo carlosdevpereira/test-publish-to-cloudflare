@@ -1,11 +1,12 @@
 import Commit from './Commit';
 import Cloudflare from './Cloudflare';
-import cloudflareConfig from './config/cloudflare';
 import Repository from './Repository';
 
 export default class GithubAction {
-  constructor(context) {
+  constructor(context, config) {
     this.context = context;
+    this.config = config;
+
     this.repository = new Repository(context.repo.repo, context.repo.owner);
     this.commit = new Commit(context.sha, this.repository);
 
@@ -20,7 +21,7 @@ export default class GithubAction {
   }
 
   async publishToCloudflare() {
-    const cloudflare = new Cloudflare(cloudflareConfig);
+    const cloudflare = new Cloudflare(this.config.cloudflare);
     this.coverageReportUrl = await cloudflare.publish(this.commit.shortHash());
 
     return this;
