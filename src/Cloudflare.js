@@ -1,5 +1,4 @@
 const shellac = require('shellac').default;
-const core = require('@actions/core');
 
 const COVERAGE_OUTPUT_FOLDER = './coverage';
 
@@ -12,8 +11,6 @@ class Cloudflare {
   }
 
   async publish(commitSha) {
-    core.info('going to publish commit sha with shellac: ' + commitSha);
-
     await shellac`
     $ export CLOUDFLARE_API_TOKEN="${this.apiToken}"
     $ export CLOUDFLARE_ACCOUNT_ID="${this.accountId}"

@@ -12,9 +12,9 @@ class Repository {
     this.owner = owner;
     this.config = config;
 
-    this.branch = this.config.github.branch;
-    this.github = github.getOctokit(this.config.github.token);
-    this.testFramework = new Framework(this.config.testing.framework);
+    this.branch = config.github.branch;
+    this.github = github.getOctokit(config.github.token);
+    this.testFramework = new Framework(config.testing.framework);
   }
 
   async getPullRequests() {
@@ -25,8 +25,8 @@ class Repository {
 
     for (let i = 0; i < pulls.items.length; i++) {
       const { data: pullRequest } = await this.github.rest.pulls.get({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+        repo: this.name,
+        owner: this.owner,
         pull_number: pulls.items[i].number
       });
 

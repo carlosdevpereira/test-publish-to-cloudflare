@@ -5,9 +5,10 @@ const core = require('@actions/core');
 
 class GithubAction {
   constructor(context, config) {
-    this.context = context;
     this.config = config;
 
+    core.info('context: ' + JSON.stringify(context));
+    core.info('config: ' + JSON.stringify(config));
     this.repository = new Repository(context.repo.repo, context.repo.owner, config);
     this.commit = new Commit(context.sha, this.repository);
 
@@ -23,12 +24,7 @@ class GithubAction {
 
   async publishToCloudflare() {
     const cloudflare = new Cloudflare(this.config.cloudflare);
-    core.info('cloudflare: ');
-    core.info(cloudflare);
     const commitShortHash = this.commit.shortHash();
-    core.info('short hash: ');
-    core.info(commitShortHash);
-
     this.coverageReportUrl = await cloudflare.publish(commitShortHash);
 
     return this;
