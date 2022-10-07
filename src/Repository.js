@@ -20,10 +20,10 @@ class Repository {
 
   async getPullRequests() {
     const pullRequests = [];
-    const q = `is:pr state:open repo:${this.owner}/${this.repo} head:${this.branch}`;
+    const q = `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`;
     core.info('q: ' + q);
     const { data: pulls } = await this.github.rest.search.issuesAndPullRequests({
-      q: `is:pr state:open repo:${this.owner}/${this.repo} head:${this.branch}`
+      q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`
     });
 
     for (let i = 0; i < pulls.items.length; i++) {
@@ -49,7 +49,7 @@ class Repository {
   async commentPullRequest(pullRequest, testResults, fullReportUrl) {
     const { data: comments } = await this.github.rest.issues.listComments({
       owner: this.owner,
-      repo: this.repo,
+      repo: this.name,
       issue_number: pullRequest.number
     });
     const botComment = comments.find(comment => comment.user.id === 41898282);
@@ -80,7 +80,7 @@ class Repository {
     if (botComment) {
       await this.github.rest.issues.updateComment({
         owner: this.owner,
-        repo: this.repo,
+        repo: this.name,
         comment_id: botComment.id,
         body: commentBody
       });
