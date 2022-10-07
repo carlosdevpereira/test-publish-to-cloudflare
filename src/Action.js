@@ -1,6 +1,7 @@
 const Commit = require('./Commit');
 const Cloudflare = require('./Cloudflare');
 const Repository = require('./Repository');
+const core = require('@actions/core');
 
 class GithubAction {
   constructor(context, config) {
@@ -22,7 +23,11 @@ class GithubAction {
 
   async publishToCloudflare() {
     const cloudflare = new Cloudflare(this.config.cloudflare);
-    this.coverageReportUrl = await cloudflare.publish(this.commit.shortHash());
+    core.info('cloudflare: ', cloudflare);
+    const commitShortHash = this.commit.shortHash();
+    core.info('short hash: ', commitShortHash);
+
+    this.coverageReportUrl = await cloudflare.publish(commitShortHash);
 
     return this;
   }

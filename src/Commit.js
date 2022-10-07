@@ -8,9 +8,9 @@ class Commit {
   }
 
   /**
-     *  Returns the short version of the commit hash.
-     * (The first 7 characters)
-     */
+   *  Returns the short version of the commit hash.
+   * (The first 7 characters)
+   */
   shortHash() {
     return this.hash.slice(0, 7);
   }
