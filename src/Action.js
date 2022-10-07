@@ -7,7 +7,7 @@ class GithubAction {
     this.context = context;
     this.config = config;
 
-    this.repository = new Repository(context.repo.repo, context.repo.owner);
+    this.repository = new Repository(context.repo.repo, context.repo.owner, config);
     this.commit = new Commit(context.sha, this.repository);
 
     this.testResults = null;
