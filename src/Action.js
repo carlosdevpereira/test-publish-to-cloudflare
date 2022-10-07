@@ -1,8 +1,8 @@
-import Commit from './Commit';
-import Cloudflare from './Cloudflare';
-import Repository from './Repository';
+const Commit = require('./Commit');
+const Cloudflare = require('./Cloudflare');
+const Repository = require('./Repository');
 
-export default class GithubAction {
+class GithubAction {
   constructor(context, config) {
     this.context = context;
     this.config = config;
@@ -37,3 +37,5 @@ export default class GithubAction {
     return this;
   }
 }
+
+module.exports = GithubAction;

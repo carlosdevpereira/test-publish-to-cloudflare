@@ -1,7 +1,7 @@
 /**
  * Represents a commit inside a repository
  */
-export default class Commit {
+class Commit {
   constructor(hash, repository) {
     this.hash = hash;
     this.repository = repository;
@@ -15,3 +15,5 @@ export default class Commit {
     return this.hash.slice(0, 7);
   }
 }
+
+module.exports = Commit;

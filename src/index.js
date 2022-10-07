@@ -1,8 +1,8 @@
-import core from '@actions/core';
-import github from '@actions/github';
-import GithubAction from './Action';
+const core = require('@actions/core');
+const github = require('@actions/github');
+const GithubAction = require('./Action');
 
-async function run () {
+async function run() {
   try {
     const Action = new GithubAction(github.context, {
       testing: {

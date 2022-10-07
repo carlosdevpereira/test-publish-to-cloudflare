@@ -1,8 +1,8 @@
-import shellac from 'shellac';
+const shellac = require('shellac');
 
 const COVERAGE_OUTPUT_FOLDER = './coverage';
 
-export default class Cloudflare {
+class Cloudflare {
   constructor(config) {
     this.apiToken = config.apiToken;
     this.accountId = config.accountId;
@@ -21,3 +21,5 @@ export default class Cloudflare {
     return `https://${commitSha}.${this.baseUrl}`;
   }
 }
+
+module.exports = Cloudflare;

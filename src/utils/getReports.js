@@ -1,7 +1,7 @@
-import { HttpClient } from '@actions/http-client';
-import core from '@actions/core';
+const core = require('@actions/core');
+const { HttpClient } = require('@actions/http-client');
 
-export default async function GetReport({ reportUrl, retryCount = 3, ignoreErrors = false } = {}) {
+async function GetReport({ reportUrl, retryCount = 3, ignoreErrors = false } = {}) {
   try {
     const http = new HttpClient();
     const res = await http.get(reportUrl);
@@ -23,7 +23,7 @@ export default async function GetReport({ reportUrl, retryCount = 3, ignoreError
   }
 }
 
-export function TotalPercentagesAverage(report) {
+function TotalPercentagesAverage(report) {
   const percentages = [
     report.total.lines.pct,
     report.total.statements.pct,
@@ -33,3 +33,8 @@ export function TotalPercentagesAverage(report) {
 
   return (percentages.reduce((a, b) => a + b, 0) / percentages.length);
 }
+
+module.exports = {
+  GetReport,
+  TotalPercentagesAverage
+};

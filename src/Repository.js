@@ -1,12 +1,12 @@
-import github from '@actions/github';
-import Framework from './Framework';
-import GetReport, { TotalPercentagesAverage } from './utils/getReports';
-import { BuildCommentBody } from './utils/buildComment';
+const github = require('@actions/github');
+const Framework = require('./Framework');
+const { GetReport, TotalPercentagesAverage } = require('./utils/getReports');
+const { BuildCommentBody } = require('./utils/buildComment');
 
 /**
  * Represents a Github repository
  */
-export default class Repository {
+class Repository {
   constructor(name, owner, config) {
     this.name = name;
     this.owner = owner;
@@ -91,3 +91,5 @@ export default class Repository {
     }
   }
 }
+
+module.exports = Repository;

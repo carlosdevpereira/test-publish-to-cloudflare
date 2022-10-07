@@ -1,4 +1,4 @@
-export function BuildCommentBody({
+function BuildCommentBody({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage,
   hasBaseResults, headTotals, baseTotals, testResults, headShortHash,
   baseShortHash, fullReportUrl
@@ -39,7 +39,7 @@ export function BuildCommentBody({
   return commentBody;
 }
 
-export function BuildCommentHeadMessage({
+function BuildCommentHeadMessage({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage
 }) {
   let coverageMessage;
@@ -63,7 +63,7 @@ export function BuildCommentHeadMessage({
   return coverageMessage;
 }
 
-export function BuildCoverageSummaryTable({
+function BuildCoverageSummaryTable({
   hasBaseResults, headTotals, baseTotals
 }) {
   let coverageSummaryTable = `
@@ -134,7 +134,7 @@ export function BuildCoverageSummaryTable({
   return coverageSummaryTable;
 }
 
-export function CalculateTimeTaken(startedAt, endedAt) {
+function CalculateTimeTaken(startedAt, endedAt) {
   const msDifference = endedAt - startedAt;
   const secondsTaken = Math.floor(msDifference / 1000);
   const minutesTaken = Math.floor(msDifference / 1000 / 60);
@@ -147,3 +147,10 @@ export function CalculateTimeTaken(startedAt, endedAt) {
 
   return timeTaken;
 }
+
+module.exports = {
+  BuildCommentBody,
+  BuildCommentHeadMessage,
+  BuildCoverageSummaryTable,
+  CalculateTimeTaken
+};

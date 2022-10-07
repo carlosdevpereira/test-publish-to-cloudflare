@@ -1,5 +1,5 @@
-import fs from 'fs';
-import { exec } from '@actions/exec';
+const fs = require('fs');
+const { exec } = require('@actions/exec');
 
 const SUPPORTED_TEST_FRAMEWORKS = ['jest'];
 const COVERAGE_OUTPUT_FOLDER = './coverage';
@@ -7,7 +7,7 @@ const COVERAGE_OUTPUT_FOLDER = './coverage';
 /**
  * Represents a testing framework
  */
-export default class Framework {
+class Framework {
   constructor(frameworkName) {
     if (!SUPPORTED_TEST_FRAMEWORKS.includes(frameworkName)) {
       throw new Error(
@@ -46,3 +46,5 @@ export default class Framework {
     return this.testResults;
   }
 }
+
+module.exports = Framework;
