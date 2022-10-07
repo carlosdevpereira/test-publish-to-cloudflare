@@ -23,9 +23,11 @@ class GithubAction {
 
   async publishToCloudflare() {
     const cloudflare = new Cloudflare(this.config.cloudflare);
-    core.info('cloudflare: ', cloudflare);
+    core.info('cloudflare: ');
+    core.info(cloudflare);
     const commitShortHash = this.commit.shortHash();
-    core.info('short hash: ', commitShortHash);
+    core.info('short hash: ');
+    core.info(commitShortHash);
 
     this.coverageReportUrl = await cloudflare.publish(commitShortHash);
 
