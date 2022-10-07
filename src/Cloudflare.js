@@ -1,4 +1,4 @@
-const shellac = require('shellac');
+const shellac = require('shellac').default;
 const core = require('@actions/core');
 
 const COVERAGE_OUTPUT_FOLDER = './coverage';
