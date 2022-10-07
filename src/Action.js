@@ -9,7 +9,7 @@ class GithubAction {
 
     core.info('context: ' + JSON.stringify(context));
     core.info('config: ' + JSON.stringify(config));
-    this.repository = new Repository(context.repo.repo, context.repo.owner, config);
+    this.repository = new Repository(context.payload.repository.name, context.payload.repository.owner.login, config);
     this.commit = new Commit(context.sha, this.repository);
 
     this.testResults = null;
