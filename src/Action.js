@@ -22,7 +22,7 @@ class GithubAction {
   async publishToCloudflare() {
     const cloudflare = new Cloudflare(this.config.cloudflare);
     const commitShortHash = this.commit.shortHash();
-    this.coverageReportUrl = cloudflare.publish(commitShortHash);
+    this.coverageReportUrl = await cloudflare.publish(commitShortHash);
 
     return this;
   }
