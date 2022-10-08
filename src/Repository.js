@@ -2,7 +2,6 @@ const github = require('@actions/github');
 const Framework = require('./Framework');
 const { GetReport, TotalPercentagesAverage } = require('./utils/getReports');
 const { BuildCommentBody } = require('./utils/buildComment');
-const core = require('@actions/core');
 
 /**
  * Represents a Github repository
@@ -23,7 +22,6 @@ class Repository {
     const { data: pulls } = await this.github.rest.search.issuesAndPullRequests({
       q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`
     });
-    core.info('pull requests: ' + JSON.stringify(pulls));
 
     for (let i = 0; i < pulls.items.length; i++) {
       const { data: pullRequest } = await this.github.rest.pulls.get({

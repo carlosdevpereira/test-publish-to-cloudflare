@@ -20,21 +20,21 @@ function BuildCommentBody({
 
   const commentBody = `## 🔖 Coverage Report
     ${coverageMessage}
-    
+
     ${coverageSummaryTable}
-    
-    <details>
+
+<details>
     <summary>Metrics</summary>
             
     - Test Suites: **${testResults.numPassedTestSuites} passed**, ${testResults.numTotalTestSuites} total
     - Tests: **${testResults.numPassedTests} passed**, ${testResults.numTotalTests} total
     - Snapshots: **${testResults.snapshot.total} total**
     - Time: **${timeTaken}**
-    </details>
+</details>
     
-    > Coverage data is based on head **${branchName}** (\`${headShortHash, baseShortHash}\`) compared to base **${baseRef}** (\`${baseShortHash}\`).
+> Coverage data is based on head **${branchName}** (\`${headShortHash, baseShortHash}\`) compared to base **${baseRef}** (\`${baseShortHash}\`).
     
-    [View full coverage report 🔗](${fullReportUrl})`;
+[View full coverage report 🔗](${fullReportUrl})`;
 
   return commentBody;
 }
@@ -66,8 +66,7 @@ function BuildCommentHeadMessage({
 function BuildCoverageSummaryTable({
   hasBaseResults, headTotals, baseTotals
 }) {
-  let coverageSummaryTable = `
-\`\`\`diff
+  let coverageSummaryTable = `\`\`\`diff
 @@                             Coverage Summary                          @@
    -----------------------------------------------------------------------
   |   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |

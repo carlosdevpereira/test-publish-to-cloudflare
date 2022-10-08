@@ -1,7 +1,6 @@
 const Commit = require('./Commit');
 const Cloudflare = require('./Cloudflare');
 const Repository = require('./Repository');
-const core = require('@actions/core');
 
 class GithubAction {
   constructor(context, config) {
@@ -30,8 +29,6 @@ class GithubAction {
 
   async commentOnAvailablePullRequests() {
     const pullRequests = await this.repository.getPullRequests();
-
-    core.info('final pull request array: ' + JSON.stringify(pullRequests));
 
     pullRequests.forEach(async pullRequest => {
       await this.repository.commentPullRequest(pullRequest, this.testResults, this.coverageReportUrl);
