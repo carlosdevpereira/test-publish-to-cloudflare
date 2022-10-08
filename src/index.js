@@ -4,7 +4,6 @@ const GithubAction = require('./Action');
 
 async function run() {
   try {
-    core.info('github: ' + JSON.stringify(github));
     const Action = new GithubAction(github.context, {
       testing: {
         framework: core.getInput('framework')

@@ -20,11 +20,10 @@ class Repository {
 
   async getPullRequests() {
     const pullRequests = [];
-    const q = `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`;
-    core.info('q: ' + q);
     const { data: pulls } = await this.github.rest.search.issuesAndPullRequests({
       q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`
     });
+    core.info('pull requests: ' + JSON.stringify(pulls));
 
     for (let i = 0; i < pulls.items.length; i++) {
       const { data: pullRequest } = await this.github.rest.pulls.get({
@@ -87,8 +86,8 @@ class Repository {
     } else {
       await this.github.rest.issues.createComment({
         issue_number: pullRequest.number,
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+        owner: this.owner,
+        repo: this.name,
         body: commentBody
       });
     }

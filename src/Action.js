@@ -7,8 +7,6 @@ class GithubAction {
   constructor(context, config) {
     this.config = config;
 
-    core.info('context: ' + JSON.stringify(context));
-    core.info('config: ' + JSON.stringify(config));
     this.repository = new Repository(context.payload.repository.name, context.payload.repository.owner.login, config);
     this.commit = new Commit(context.sha, this.repository);
 
@@ -33,8 +31,10 @@ class GithubAction {
   async commentOnAvailablePullRequests() {
     const pullRequests = await this.repository.getPullRequests();
 
+    core.info('final pull request array: ' + JSON.stringify(pullRequests));
+
     pullRequests.forEach(async pullRequest => {
-      await this.repository.commentPullRequests(pullRequest, this.testResults, this.coverageReportUrl);
+      await this.repository.commentPullRequest(pullRequest, this.testResults, this.coverageReportUrl);
     });
 
     return this;
