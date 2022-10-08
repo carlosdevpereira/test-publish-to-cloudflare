@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Release
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://github.com/marketplace/actions/test-publish-to-cloudflare
+    steps:
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+
+      - name: Setup Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          release-type: node
+          package-name: test-publish-to-cloudflare
+          default-branch: main
+          pull-request-title-pattern: "🚀 Release ${component} ${version}"
+          changelog-types: '[{"type":"feat","section":"✨ Features","hidden":false},{"type":"fix","section":"🚨 Bug Fixes","hidden":false},{"type":"hotfix","section":"🚒 Hotfixes","hidden":false},{"type":"chore","section":"👷 Maintenance","hidden":false},{"type":"docs","section":"📚 Documentation","hidden":false}]'
+      - uses: actions/checkout@v3
+      - name: tag major and minor versions
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          git config user.name carlosdevpereira
+          git config user.email carlos@carlosdevpereira.com
+          pnpm install && pnpm build
+          git add dist/** -f
+          git tag -d v${{ steps.release.outputs.major }} || true
+          git tag -d v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
+          git push origin :v${{ steps.release.outputs.major }} || true
+          git push origin :v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
+          git tag -a v${{ steps.release.outputs.major }} -m "Release v${{ steps.release.outputs.major }}"
+          git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}"
+          git push origin v${{ steps.release.outputs.major }}
+          git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
