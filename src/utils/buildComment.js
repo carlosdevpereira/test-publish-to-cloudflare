@@ -19,17 +19,18 @@ function BuildCommentBody({
   const timeTaken = CalculateTimeTaken(testResults.startTime, testResults.testResults[testResults.testResults.length - 1].endTime);
 
   const commentBody = `## 🔖 Coverage Report
-    ${coverageMessage}
 
-    ${coverageSummaryTable}
+${coverageMessage}
+
+${coverageSummaryTable}
 
 <details>
-    <summary>Metrics</summary>
-            
-    - Test Suites: **${testResults.numPassedTestSuites} passed**, ${testResults.numTotalTestSuites} total
-    - Tests: **${testResults.numPassedTests} passed**, ${testResults.numTotalTests} total
-    - Snapshots: **${testResults.snapshot.total} total**
-    - Time: **${timeTaken}**
+<summary>Metrics</summary>
+
+- Test Suites: **${testResults.numPassedTestSuites} passed**, ${testResults.numTotalTestSuites} total
+- Tests: **${testResults.numPassedTests} passed**, ${testResults.numTotalTests} total
+- Snapshots: **${testResults.snapshot.total} total**
+- Time: **${timeTaken}**
 </details>
     
 > Coverage data is based on head **${branchName}** (\`${headShortHash, baseShortHash}\`) compared to base **${baseRef}** (\`${baseShortHash}\`).
@@ -45,15 +46,15 @@ function BuildCommentHeadMessage({
   let coverageMessage;
 
   if (headAvgPercentage > baseAvgPercentage) {
-    coverageMessage = `\n> Wooo 🎉, the tests are passing and the coverage percentage **increased**, well done! 👏\n> ${
+    coverageMessage = `> Wooo 🎉, the tests are passing and the coverage percentage **increased**, well done! 👏\n> ${
       baseRef
     }: **${Math.round(baseAvgPercentage, -1)}%** | ${
       branchName
     }: **${Math.round(headAvgPercentage, -1)}%**`;
   } else if (headAvgPercentage === baseAvgPercentage) {
-    coverageMessage = '\n> Good job 👌, the tests are passing and the coverage percentage remained intact.';
+    coverageMessage = '> Good job 👌, the tests are passing and the coverage percentage remained intact.';
   } else {
-    coverageMessage = `\n> Tests are passing but the coverage percentage **decreased** 😱, read coverage report below for more details.\n\n🔻 ${
+    coverageMessage = `> Tests are passing but the coverage percentage **decreased** 😱, read coverage report below for more details.\n\n🔻 ${
       baseRef
     }: **${Math.round(baseAvgPercentage, -1)}%** | ${
       branchName
