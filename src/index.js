@@ -39,3 +39,5 @@ async function run() {
 
 // 🚀 Execute Github Action
 run();
+
+exports.run = run;
