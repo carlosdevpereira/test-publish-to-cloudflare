@@ -26,6 +26,7 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GH_TOKEN }}
+          prerelease: false
           release-type: node
           package-name: test-publish-to-cloudflare
           default-branch: main

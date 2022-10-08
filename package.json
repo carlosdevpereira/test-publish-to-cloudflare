@@ -1,7 +1,7 @@
 {
   "name": "test-publish-to-cloudflare",
   "description": "Github action that runs the test command of a repository, generates the test coverage report, uploads the report to cloudflare pages and comments the results on available pull requests.",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "main": "dist/index.js",
   "packageManager": "pnpm@7.13.2",
   "scripts": {
