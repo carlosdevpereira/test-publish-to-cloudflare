@@ -7,9 +7,15 @@ name: Release
 jobs:
   release-please:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16]
+
     environment:
       name: production
       url: https://github.com/marketplace/actions/test-publish-to-cloudflare
+
     steps:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.2
@@ -31,7 +37,9 @@ jobs:
           default-branch: main
           pull-request-title-pattern: "🚀 Release ${component} ${version}"
           changelog-types: '[{"type":"feat","section":"✨ Features","hidden":false},{"type":"fix","section":"🚨 Bug Fixes","hidden":false},{"type":"hotfix","section":"🚒 Hotfixes","hidden":false},{"type":"chore","section":"👷 Maintenance","hidden":false},{"type":"docs","section":"📚 Documentation","hidden":false}]'
+
       - uses: actions/checkout@v3
+
       - name: tag major and minor versions
         if: ${{ steps.release.outputs.release_created }}
         run: |
