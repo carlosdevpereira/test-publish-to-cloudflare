@@ -81,11 +81,9 @@ function BuildCoverageSummaryTable({
         : '-'
   } `;
 
-  coverageSummaryTable += `| Statements   |     ${
-    hasBaseResults ? baseTotals.statements.pct.toString() + '%' : '   -  '
-  }      |      ${headTotals.statements.pct}%      |       ${
-    headTotals.statements.covered
-  }/${headTotals.statements.total}     |`;
+  coverageSummaryTable += `| Statements   |${
+    hasBaseResults ? centerValueOnString(baseTotals.statements.pct + '%', '                 ') : '   -  '
+  }|${centerValueOnString(headTotals.statements.pct + '%', '                  ')}|${ centerValueOnString(headTotals.statements.covered + '/' + headTotals.statements.total, '                   ') }|`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.branches.pct > baseTotals.branches.pct
@@ -95,11 +93,9 @@ function BuildCoverageSummaryTable({
         : '-'
   } `;
 
-  coverageSummaryTable += `| Branches     |     ${
-    hasBaseResults ? baseTotals.branches.pct.toString() + '%' : '   -  '
-  }      |      ${headTotals.branches.pct}%      |       ${
-    headTotals.branches.covered
-  }/${headTotals.branches.total}     |`;
+  coverageSummaryTable += `| Branches     |${
+    hasBaseResults ? centerValueOnString(baseTotals.branches.pct + '%', '                 ') : '   -  '
+  }|${centerValueOnString(headTotals.branches.pct + '%', '                  ')}|${centerValueOnString(headTotals.branches.covered + '/' + headTotals.branches.total, '                   ')}|`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.functions.pct > baseTotals.functions.pct
@@ -109,11 +105,9 @@ function BuildCoverageSummaryTable({
         : '-'
   } `;
 
-  coverageSummaryTable += `| Functions    |     ${
-    hasBaseResults ? baseTotals.functions.pct.toString() + '%' : '   -  '
-  }      |      ${headTotals.functions.pct}%      |       ${
-    headTotals.functions.covered
-  }/${headTotals.functions.total}     |`;
+  coverageSummaryTable += `| Functions    |${
+    hasBaseResults ? centerValueOnString(baseTotals.functions.pct + '%', '                 ') : '   -  '
+  }|${centerValueOnString(headTotals.functions.pct + '%', '                  ')}|${centerValueOnString(headTotals.functions.covered + '/' + headTotals.functions.total, '                   ')}|`;
 
   coverageSummaryTable += `\n${
     !hasBaseResults || headTotals.lines.pct > baseTotals.lines.pct
@@ -123,11 +117,9 @@ function BuildCoverageSummaryTable({
         : '-'
   } `;
 
-  coverageSummaryTable += `| Lines        |     ${
-    hasBaseResults ? baseTotals.lines.pct.toString() + '%' : '   -  '
-  }      |      ${headTotals.lines.pct}%      |       ${
-    headTotals.lines.covered
-  }/${headTotals.lines.total}     |`;
+  coverageSummaryTable += `| Lines        |${
+    hasBaseResults ? centerValueOnString(baseTotals.lines.pct + '%', '                 ') : '   -  '
+  }|${centerValueOnString(headTotals.lines.pct + '%', '                  ')}|${centerValueOnString(headTotals.lines.covered + '/' + headTotals.lines.total, '                   ') }|`;
 
   coverageSummaryTable += '\n  -------------------------------------------------------------------------\n```';
 
@@ -146,6 +138,18 @@ function CalculateTimeTaken(startedAt, endedAt) {
   if (secondsTaken > 0) timeTaken += `${secondsTaken} seconds`;
 
   return timeTaken;
+}
+
+function centerValueOnString(value, placeholder = '                   ') {
+  const valueLength = value.length;
+  const placeholderAvailableSpace = placeholder.length;
+
+  if (valueLength > placeholderAvailableSpace) return value;
+
+  const whiteSpacesLength = placeholderAvailableSpace - valueLength;
+  const whiteSpacePads = whiteSpacesLength / 2;
+
+  return ' ' + ' '.repeat(whiteSpacePads) + value + ' '.repeat(whiteSpacePads);
 }
 
 module.exports = {
