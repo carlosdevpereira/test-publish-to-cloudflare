@@ -1,3 +1,5 @@
+const markdownTable = require('markdown-table-cjs');
+
 function BuildCommentBody({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage,
   hasBaseResults, headTotals, baseTotals, testResults, headShortHash,
@@ -68,61 +70,15 @@ function BuildCoverageSummaryTable({
   hasBaseResults, headTotals, baseTotals
 }) {
   let coverageSummaryTable = `\`\`\`diff
-@@                             Coverage Summary                          @@
-   -----------------------------------------------------------------------
-  |   Category   |  Master Branch  |  Current Branch  |  Covered / Total  |
-  | ------------ | --------------- | ---------------- | ----------------- |`;
-
-  coverageSummaryTable += `\n${
-    !hasBaseResults || headTotals.statements.pct > baseTotals.statements.pct
-      ? '+'
-      : baseTotals.statements.pct === headTotals.statements.pct
-        ? ' '
-        : '-'
-  } `;
-
-  coverageSummaryTable += `| Statements   |${
-    hasBaseResults ? centerValueOnString(baseTotals.statements.pct + '%', '                 ') : '   -  '
-  }|${centerValueOnString(headTotals.statements.pct + '%', '                  ')}|${ centerValueOnString(headTotals.statements.covered + '/' + headTotals.statements.total, '                   ') }|`;
-
-  coverageSummaryTable += `\n${
-    !hasBaseResults || headTotals.branches.pct > baseTotals.branches.pct
-      ? '+'
-      : baseTotals.branches.pct === headTotals.branches.pct
-        ? ' '
-        : '-'
-  } `;
-
-  coverageSummaryTable += `| Branches     |${
-    hasBaseResults ? centerValueOnString(baseTotals.branches.pct + '%', '                 ') : '   -  '
-  }|${centerValueOnString(headTotals.branches.pct + '%', '                  ')}|${centerValueOnString(headTotals.branches.covered + '/' + headTotals.branches.total, '                   ')}|`;
-
-  coverageSummaryTable += `\n${
-    !hasBaseResults || headTotals.functions.pct > baseTotals.functions.pct
-      ? '+'
-      : baseTotals.functions.pct === headTotals.functions.pct
-        ? ' '
-        : '-'
-  } `;
-
-  coverageSummaryTable += `| Functions    |${
-    hasBaseResults ? centerValueOnString(baseTotals.functions.pct + '%', '                 ') : '   -  '
-  }|${centerValueOnString(headTotals.functions.pct + '%', '                  ')}|${centerValueOnString(headTotals.functions.covered + '/' + headTotals.functions.total, '                   ')}|`;
-
-  coverageSummaryTable += `\n${
-    !hasBaseResults || headTotals.lines.pct > baseTotals.lines.pct
-      ? '+'
-      : baseTotals.lines.pct === headTotals.lines.pct
-        ? ' '
-        : '-'
-  } `;
-
-  coverageSummaryTable += `| Lines        |${
-    hasBaseResults ? centerValueOnString(baseTotals.lines.pct + '%', '                 ') : '   -  '
-  }|${centerValueOnString(headTotals.lines.pct + '%', '                  ')}|${centerValueOnString(headTotals.lines.covered + '/' + headTotals.lines.total, '                   ') }|`;
-
-  coverageSummaryTable += '\n  -------------------------------------------------------------------------\n```';
-
+@@                             Coverage Summary                          @@\n`;
+  coverageSummaryTable += markdownTable([
+    ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
+    [baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
+    [baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
+    [baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
+    [baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
+  ]);
+  // @TODO: Re-do highlighting of rows based on changes
   return coverageSummaryTable;
 }
 
@@ -149,7 +105,7 @@ function centerValueOnString(value, placeholder = '                   ') {
   const whiteSpacesLength = placeholderAvailableSpace - valueLength;
   const whiteSpacePads = whiteSpacesLength / 2;
 
-  return ' ' + ' '.repeat(whiteSpacePads) + value + ' '.repeat(whiteSpacePads);
+  return ' ' + ' '.repeat(whiteSpacePads) + value + ' '.repeat(whiteSpacePads - 1);
 }
 
 module.exports = {
