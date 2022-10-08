@@ -10,7 +10,7 @@ module.exports = {
     '**/tests/**/*.spec.(js|jsx)|**/__tests__/*.(js|jsx)'
   ],
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
-  coverageReporters: ['json', 'html'],
+  coverageReporters: ['json-summary', 'html'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!**/*.config.js',
