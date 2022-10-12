@@ -71,17 +71,26 @@ async function BuildCoverageSummaryTable({
   hasBaseResults, headTotals, baseTotals
 }) {
   let coverageSummaryTable = `\`\`\`diff
-@@                             Coverage Summary                          @@\n`;
+@@                        Coverage Summary                      @@\n
+----------------------------------------------------------------\n`;
 
-  coverageSummaryTable += await markdownTable([
-    ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
-    ['Statements', baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
-    ['Branches', baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
-    ['Functions', baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
-    ['Lines', baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
-  ]);
+  const mdTable = await markdownTable(
+    [
+      ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
+      ['Statements', baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
+      ['Branches', baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
+      ['Functions', baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
+      ['Lines', baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
+    ],
+    {
+      align: ['l', 'c', 'c', 'c']
+    }
+  );
 
-  coverageSummaryTable += '\n  -------------------------------------------------------------------------\n```';
+  core.info('md table:');
+  core.info(mdTable);
+
+  coverageSummaryTable += mdTable + '\n -----------------------------------------------------------------\n```';
 
   return coverageSummaryTable;
 }
