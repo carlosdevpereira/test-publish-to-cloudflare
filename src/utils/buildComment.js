@@ -75,13 +75,13 @@ async function BuildCoverageSummaryTable({
 
   coverageSummaryTable += await markdownTable([
     ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
-    [baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
-    [baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
-    [baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
-    [baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
+    ['Statements', baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
+    ['Branches', baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
+    ['Functions', baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
+    ['Lines', baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
   ]);
 
-  core.info('table: ' + coverageSummaryTable);
+  coverageSummaryTable += '\n  -------------------------------------------------------------------------\n```';
 
   return coverageSummaryTable;
 }
