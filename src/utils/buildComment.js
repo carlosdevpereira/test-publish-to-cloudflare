@@ -1,4 +1,3 @@
-const core = require('@actions/core');
 const markdownTable = require('../lib/markdownTable').markdownTable;
 
 async function BuildCommentBody({
@@ -71,10 +70,9 @@ async function BuildCoverageSummaryTable({
   hasBaseResults, headTotals, baseTotals
 }) {
   let coverageSummaryTable = `\`\`\`diff
-@@                        Coverage Summary                      @@\n
-----------------------------------------------------------------\n`;
+@@                        Coverage Summary                     @@\n  ---------------------------------------------------------------\n`;
 
-  const mdTable = await markdownTable(
+  let mdTable = await markdownTable(
     [
       ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
       ['Statements', baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
@@ -87,10 +85,15 @@ async function BuildCoverageSummaryTable({
     }
   );
 
-  core.info('md table:');
-  core.info(mdTable);
+  mdTable = mdTable.replaceAll(':', '-');
+  mdTable = mdTable.replace('| Category', ' | Category');
+  mdTable = mdTable.replace('| ---------- | ------------- | -------------- | --------------- |', ' | ---------- | ------------- | -------------- | --------------- |');
+  mdTable = highlightRow(mdTable, 'Statements', hasBaseResults, baseTotals.statements.pct, headTotals.statements.pct);
+  mdTable = highlightRow(mdTable, 'Branches', hasBaseResults, baseTotals.branches.pct, headTotals.branches.pct);
+  mdTable = highlightRow(mdTable, 'Functions', hasBaseResults, baseTotals.functions.pct, headTotals.functions.pct);
+  mdTable = highlightRow(mdTable, 'Lines', hasBaseResults, baseTotals.lines.pct, headTotals.lines.pct);
 
-  coverageSummaryTable += mdTable + '\n -----------------------------------------------------------------\n```';
+  coverageSummaryTable += mdTable + '\n  ---------------------------------------------------------------\n```';
 
   return coverageSummaryTable;
 }
@@ -109,16 +112,17 @@ function CalculateTimeTaken(startedAt, endedAt) {
   return timeTaken;
 }
 
-function centerValueOnString(value, placeholder = '                   ') {
-  const valueLength = value.length;
-  const placeholderAvailableSpace = placeholder.length;
+function highlightRow(table, category, hasResults, basePercentage, headPercentage) {
+  // Set row colors based on coverage changes
+  if (!hasResults || headPercentage > basePercentage) {
+    table.replace(`| ${category}`, `+| ${category}`);
+  } else if (basePercentage === headPercentage) {
+    table.replace(`| ${category}`, ` | ${category}`);
+  } else {
+    table.replace(`| ${category}`, `-| ${category}`);
+  }
 
-  if (valueLength > placeholderAvailableSpace) return value;
-
-  const whiteSpacesLength = placeholderAvailableSpace - valueLength;
-  const whiteSpacePads = whiteSpacesLength / 2;
-
-  return ' ' + ' '.repeat(whiteSpacePads) + value + ' '.repeat(whiteSpacePads - 1);
+  return table;
 }
 
 module.exports = {
