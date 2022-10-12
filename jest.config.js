@@ -9,7 +9,7 @@ module.exports = {
   testMatch: [
     '**/tests/**/*.spec.(js|jsx)|**/__tests__/*.(js|jsx)'
   ],
-  transformIgnorePatterns: ['<rootDir>/node_modules/'],
+  transformIgnorePatterns: ['/node_modules/'],
   coverageReporters: ['json-summary', 'html'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',

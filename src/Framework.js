@@ -27,7 +27,7 @@ class Framework {
    * in this repository 😉).
    **/
   async runTests() {
-    const JEST_PATH = './node_modules/jest/bin/jest.js';
+    const JEST_PATH = 'node --experimental-vm-modules ./node_modules/jest/bin/jest.js';
     const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json';
     const RESULT_OUTPUT_FILE = `${COVERAGE_OUTPUT_FOLDER}/test-results.json`;
 

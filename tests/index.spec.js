@@ -1,23 +1,7 @@
-const actions = {
-  runTests: jest.fn(),
-  publishToCloudflare: jest.fn(),
-  commentOnAvailablePullRequests: jest.fn()
-};
-
-jest.mock('@actions/core', () => ({
-  getInput: jest.fn(),
-  startGroup: jest.fn(),
-  endGroup: jest.fn(),
-  setFailed: jest.fn()
-}));
-
-jest.mock('../src/Action', () =>  jest.fn(() => {
-  return {
-    runTests: actions.runTests,
-    publishToCloudflare: actions.publishToCloudflare,
-    commentOnAvailablePullRequests: actions.commentOnAvailablePullRequests
-  };
-}));
+const mockGithubActionsCore = require('@tests/mocks/github-actions-core');
+const mockAction = require('@tests/mocks/action');
+jest.mock('@actions/core', () => mockGithubActionsCore);
+jest.mock('../src/Action', () =>  jest.fn(() => mockAction));
 
 const core = require('@actions/core');
 const GithubAction = require('../src/Action');
@@ -71,15 +55,15 @@ describe('Action Setup', () => {
     });
 
     it('runs the unit tests of the project', () => {
-      expect(actions.runTests).toHaveBeenCalled();
+      expect(mockAction.runTests).toHaveBeenCalled();
     });
 
     it('publishes the results to cloudflare', () => {
-      expect(actions.publishToCloudflare).toHaveBeenCalled();
+      expect(mockAction.publishToCloudflare).toHaveBeenCalled();
     });
 
     it('comments the results in available pull requests', () => {
-      expect(actions.commentOnAvailablePullRequests).toHaveBeenCalled();
+      expect(mockAction.commentOnAvailablePullRequests).toHaveBeenCalled();
     });
   });
 });

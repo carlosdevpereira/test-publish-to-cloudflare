@@ -6,7 +6,7 @@
   "packageManager": "pnpm@7.13.2",
   "scripts": {
     "lint": "eslint . --fix",
-    "test": "jest --no-cache --detectOpenHandles",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --no-cache --detectOpenHandles",
     "test:coverage": "jest --no-cache --detectOpenHandles --coverage",
     "test:ci:coverage": "jest --detectOpenHandles --no-cache --ci --json --coverage --runInBand --testLocationInResults --outputFile=coverage-report.json",
     "build": "ncc build src/index.js -o dist --minify --license licenses.txt"
@@ -21,6 +21,7 @@
     "shellac": "^0.7.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.19.4",
     "@types/jest": "^29.1.2",
     "@vercel/ncc": "^0.34.0",
     "eslint": "^8.24.0",

@@ -1,27 +1,13 @@
-const repository = {
-  testFramework: {
-    runTests: jest.fn()
-  }
-};
-const commit = {
-  shortHash: () => '1234'
-};
-const cloudflare = {
-  publish: jest.fn()
-};
-jest.mock('../src/Repository', () =>  jest.fn(() => {
-  return repository;
-}));
-jest.mock('../src/Commit', () => jest.fn(() => {
-  return commit;
-}));
-jest.mock('../src/Cloudflare', () => jest.fn(() => {
-  return cloudflare;
-}));
+const mockRepository = require('@tests/mocks/repository');
+const mockCommit = require('@tests/mocks/commit');
+const mockCloudflare = require('@tests/mocks/cloudflare');
+
+jest.mock('../src/Repository', () =>  jest.fn(() => mockRepository));
+jest.mock('../src/Commit', () => jest.fn(() => mockCommit));
+jest.mock('../src/Cloudflare', () => jest.fn(() => mockCloudflare));
 
 const Repository = require('../src/Repository');
 const Commit = require('../src/Commit');
-const Cloudflare = require('../src/Cloudflare');
 
 describe('Action', () => {
   const GithubAction = require('../src/Action');
@@ -61,7 +47,7 @@ describe('Action', () => {
     it('runs the unit tests from the test framework', async () => {
       await action.runTests();
 
-      expect(repository.testFramework.runTests).toHaveBeenCalled();
+      expect(mockRepository.testFramework.runTests).toHaveBeenCalled();
     });
   });
 
@@ -69,7 +55,7 @@ describe('Action', () => {
     it('tries to publish results from specific commit to cloudflare', async () => {
       await action.publishToCloudflare();
 
-      expect(cloudflare.publish).toHaveBeenCalledWith('1234');
+      expect(mockCloudflare.publish).toHaveBeenCalledWith('1234');
     });
   });
 });
