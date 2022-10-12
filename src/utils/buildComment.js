@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const markdownTable = require('./lib/markdownTable').markdownTable;
+const markdownTable = require('../lib/markdownTable').markdownTable;
 
 function BuildCommentBody({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage,
