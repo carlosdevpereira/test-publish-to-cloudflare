@@ -115,11 +115,11 @@ function CalculateTimeTaken(startedAt, endedAt) {
 function highlightRow(table, category, hasResults, basePercentage, headPercentage) {
   // Set row colors based on coverage changes
   if (!hasResults || headPercentage > basePercentage) {
-    table.replace(`| ${category}`, `+| ${category}`);
+    table = table.replace(`| ${category}`, `+| ${category}`);
   } else if (basePercentage === headPercentage) {
-    table.replace(`| ${category}`, ` | ${category}`);
+    table = table.replace(`| ${category}`, ` | ${category}`);
   } else {
-    table.replace(`| ${category}`, `-| ${category}`);
+    table = table.replace(`| ${category}`, `-| ${category}`);
   }
 
   return table;
