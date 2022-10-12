@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const GithubAction = require('./Action');
-const { markdownTable } = require('markdown-table-cjs');
+const markdownTable = require('markdown-table-cjs').markdownTable;
 
 async function run() {
   try {
