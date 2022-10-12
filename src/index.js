@@ -1,9 +1,18 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const GithubAction = require('./Action');
+const { markdownTable } = require('markdown-table-cjs');
 
 async function run() {
   try {
+    const table = markdownTable([
+      ['Branch', 'Commit'],
+      ['main', '0123456789abcdef'],
+      ['staging', 'fedcba9876543210']
+    ]);
+
+    core.info('table: ' + table);
+
     const Action = new GithubAction(github.context, {
       testing: {
         framework: core.getInput('framework')
