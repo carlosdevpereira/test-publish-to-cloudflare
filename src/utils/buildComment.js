@@ -1,4 +1,5 @@
 const { markdownTable } = require('markdown-table-cjs');
+const core = require('@actions/core');
 
 function BuildCommentBody({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage,
@@ -72,13 +73,21 @@ function BuildCoverageSummaryTable({
   let coverageSummaryTable = `\`\`\`diff
 @@                             Coverage Summary                          @@\n`;
 
-  coverageSummaryTable += markdownTable([
-    ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
-    [baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
-    [baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
-    [baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
-    [baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
+  // coverageSummaryTable += markdownTable([
+  //   ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
+  //   [baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
+  //   [baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],
+  //   [baseTotals.functions.pct + '%', headTotals.functions.pct + '%', headTotals.functions.covered + '/' + headTotals.functions.total],
+  //   [baseTotals.lines.pct + '%', headTotals.lines.pct + '%', headTotals.lines.covered + '/' + headTotals.lines.total]
+  // ]);
+
+  const table = markdownTable([
+    ['Branch', 'Commit'],
+    ['main', '0123456789abcdef'],
+    ['staging', 'fedcba9876543210']
   ]);
+
+  core.info('table: ' + table);
 
   return coverageSummaryTable;
 }
