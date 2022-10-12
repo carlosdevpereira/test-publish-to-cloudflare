@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const markdownTable = require('../lib/markdownTable').markdownTable;
 
-function BuildCommentBody({
+async function BuildCommentBody({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage,
   hasBaseResults, headTotals, baseTotals, testResults, headShortHash,
   baseShortHash, fullReportUrl
@@ -13,7 +13,7 @@ function BuildCommentBody({
     baseAvgPercentage
   });
 
-  const coverageSummaryTable = BuildCoverageSummaryTable({
+  const coverageSummaryTable = await BuildCoverageSummaryTable({
     hasBaseResults,
     headTotals,
     baseTotals
@@ -67,13 +67,13 @@ function BuildCommentHeadMessage({
   return coverageMessage;
 }
 
-function BuildCoverageSummaryTable({
+async function BuildCoverageSummaryTable({
   hasBaseResults, headTotals, baseTotals
 }) {
   let coverageSummaryTable = `\`\`\`diff
 @@                             Coverage Summary                          @@\n`;
 
-  coverageSummaryTable += markdownTable([
+  coverageSummaryTable += await markdownTable([
     ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
     [baseTotals.statements.pct + '%', headTotals.statements.pct + '%', headTotals.statements.covered + '/' + headTotals.statements.total],
     [baseTotals.branches.pct + '%', headTotals.branches.pct + '%', headTotals.branches.covered + '/' + headTotals.branches.total],

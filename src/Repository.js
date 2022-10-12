@@ -60,7 +60,7 @@ class Repository {
       }
     );
 
-    const commentBody = BuildCommentBody({
+    const commentBody = await BuildCommentBody({
       baseRef: pullRequest.baseRef,
       branchName: this.branch,
       headAvgPercentage: TotalPercentagesAverage(headResult),
