@@ -1,4 +1,4 @@
-const markdownTable = require('markdown-table-cjs');
+const { markdownTable } = require('markdown-table-cjs');
 
 function BuildCommentBody({
   baseRef, branchName, headAvgPercentage, baseAvgPercentage,
