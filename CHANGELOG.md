@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.0...v1.3.1) (2022-10-13)
+
+
+### 🚨 Bug Fixes
+
+* removal of unnecesarry files ([7057584](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/70575849a60c4989028d8e617f0f76414d5f2719))
+
 ## [1.3.0](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.2.0...v1.3.0) (2022-10-13)
 
 
