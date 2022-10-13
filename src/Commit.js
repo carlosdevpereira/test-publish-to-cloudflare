@@ -1,6 +1,3 @@
-/**
- * Represents a commit inside a repository
- */
 class Commit {
   constructor(hash, repository) {
     this.hash = hash;

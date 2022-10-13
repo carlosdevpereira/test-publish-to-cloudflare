@@ -1,17 +1,15 @@
-const fs = require('fs');
+const fs = require('node:fs');
 const { exec } = require('@actions/exec');
 
 const SUPPORTED_TEST_FRAMEWORKS = ['jest'];
 const COVERAGE_OUTPUT_FOLDER = './coverage';
 
-/**
- * Represents a testing framework
- */
 class Framework {
   constructor(frameworkName) {
     if (!SUPPORTED_TEST_FRAMEWORKS.includes(frameworkName)) {
       throw new Error(
-        'Unsupported test framework selected. Valid options are: ' + SUPPORTED_TEST_FRAMEWORKS.join(', ')
+        'Unsupported test framework selected. Valid options are: '
+          + SUPPORTED_TEST_FRAMEWORKS.join(', ')
       );
     }
 
@@ -25,19 +23,19 @@ class Framework {
    * (If you use a different framework, and would like
    * to use this action, feel free to open a feature request
    * in this repository 😉).
-   **/
+   */
   async runTests() {
-    const JEST_PATH = './node_modules/jest/bin/jest.js';
+    const JEST_PATH = 'node --experimental-vm-modules ./node_modules/jest/bin/jest.js';
     const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json';
     const RESULT_OUTPUT_FILE = `${COVERAGE_OUTPUT_FOLDER}/test-results.json`;
 
     let results = '';
     await exec(`${JEST_PATH} ${JEST_FLAGS}`, undefined, {
       listeners: {
-        stdout: data => {
+        stdout: (data) => {
           results += data.toString();
-        }
-      }
+        },
+      },
     });
 
     fs.writeFileSync(RESULT_OUTPUT_FILE, results);

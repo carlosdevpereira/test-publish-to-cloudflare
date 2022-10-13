@@ -30,8 +30,11 @@ jobs:
       - name: Install dependencies 📦
         run: pnpm install
 
+      - name: Build action
+        run: pnpm build
+
       - name: Test & Publish to Cloudflare 🧪
-        uses: carlosdevpereira/test-publish-to-cloudflare@v1.2.6
+        uses: ./
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           branchName: ${{ github.ref_name }}

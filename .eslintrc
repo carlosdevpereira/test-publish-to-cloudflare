@@ -6,7 +6,7 @@
     "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 9,
+    "ecmaVersion": "latest",
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true,
@@ -34,7 +34,8 @@
         "after": true
       }
     ],
-    "comma-dangle": ["warn", "never"],
+    "comma-dangle": ["warn", "only-multiline"],
+    "comma-style": ["warn", "last"],
     "arrow-spacing": [
       "warn",
       {
@@ -43,32 +44,6 @@
       }
     ],
     "object-curly-spacing": ["warn", "always"],
-    "object-property-newline": "warn",
-    "object-curly-newline": [
-      "warn",
-      {
-        "ObjectExpression": {
-          "multiline": true,
-          "minProperties": 2,
-          "consistent": true
-        },
-        "ObjectPattern": {
-          "multiline": true,
-          "minProperties": 4,
-          "consistent": true
-        },
-        "ImportDeclaration": {
-          "multiline": true,
-          "minProperties": 4,
-          "consistent": true
-        },
-        "ExportDeclaration": {
-          "multiline": true,
-          "minProperties": 3,
-          "consistent": true
-        }
-      }
-    ],
     "space-before-blocks": "warn",
     "space-before-function-paren": [
       "warn",
@@ -78,7 +53,7 @@
         "asyncArrow": "always"
       }
     ],
-    "arrow-parens": ["error", "as-needed"],
+    "arrow-parens": ["warn", "always"],
     "import/no-named-default": "off",
     "handle-callback-err": "warn",
     "no-multiple-empty-lines": [
@@ -90,6 +65,7 @@
     ],
     "no-trailing-spaces": "error",
     "block-spacing": ["error", "always"],
-    "operator-linebreak": ["error", "before"]
+    "operator-linebreak": ["error", "before"],
+    "eol-last": ["warn", "never"]
   }
 }

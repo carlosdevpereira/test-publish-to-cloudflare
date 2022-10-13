@@ -48,7 +48,9 @@ jobs:
           git config user.name carlosdevpereira
           git config user.email carlos@carlosdevpereira.com
           pnpm install && pnpm build
+          git rm -r *
           git add dist/** -f
+          git add action.yml
           git tag -d v${{ steps.release.outputs.major }} || true
           git tag -d v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
           git push origin :v${{ steps.release.outputs.major }} || true
