@@ -30,9 +30,9 @@ class GithubAction {
   async commentOnAvailablePullRequests() {
     const pullRequests = await this.repository.getPullRequests();
 
-    pullRequests.forEach(async pullRequest => {
+    for (const pullRequest in pullRequests) {
       await this.repository.commentPullRequest(pullRequest, this.testResults, this.coverageReportUrl);
-    });
+    }
 
     return this;
   }

@@ -47,7 +47,7 @@ describe('Action Setup', () => {
     beforeAll(async () => {
       setupEnvironmentVariables();
 
-      await require('../src/index').run();
+      require('../src/index');
     });
 
     it('initializes the github action instance', () => {

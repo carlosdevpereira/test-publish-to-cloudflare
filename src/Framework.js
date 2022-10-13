@@ -4,9 +4,6 @@ const { exec } = require('@actions/exec');
 const SUPPORTED_TEST_FRAMEWORKS = ['jest'];
 const COVERAGE_OUTPUT_FOLDER = './coverage';
 
-/**
- * Represents a testing framework
- */
 class Framework {
   constructor(frameworkName) {
     if (!SUPPORTED_TEST_FRAMEWORKS.includes(frameworkName)) {

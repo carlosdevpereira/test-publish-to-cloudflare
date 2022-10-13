@@ -3,9 +3,6 @@ const Framework = require('./Framework');
 const { GetReport, TotalPercentagesAverage } = require('./utils/getReports');
 const { BuildCommentBody } = require('./utils/buildComment');
 
-/**
- * Represents a Github repository
- */
 class Repository {
   constructor(name, owner, config) {
     this.name = name;

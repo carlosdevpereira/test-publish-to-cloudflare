@@ -2,7 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const GithubAction = require('./Action');
 
-async function run() {
+// 🚀 Execute Github Action
+(async () => {
   try {
     const Action = new GithubAction(github.context, {
       testing: {
@@ -35,9 +36,4 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
-}
-
-// 🚀 Execute Github Action
-run();
-
-exports.run = run;
+})();
