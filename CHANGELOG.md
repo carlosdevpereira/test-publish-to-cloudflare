@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.1...v1.3.2) (2022-10-13)
+
+
+### 🚨 Bug Fixes
+
+* only add dist folder to released tag ([f20a137](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/f20a1371ac9bacaeb71949fa6711717049223d20))
+
 ## [1.3.1](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.0...v1.3.1) (2022-10-13)
 
 
