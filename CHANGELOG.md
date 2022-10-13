@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.2...v1.3.3) (2022-10-13)
+
+
+### 🚨 Bug Fixes
+
+* changelog removed tags ([11ef687](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/11ef6870b8a8b517daf9b44826465fcd10fb79fe))
+
 ## [1.3.2](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.1...v1.3.2) (2022-10-13)
 
 ### 🚨 Bug Fixes
