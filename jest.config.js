@@ -1,16 +1,4 @@
 module.exports = {
-  testEnvironment: 'node',
-  moduleFileExtensions: ['js', 'jsx', 'json'],
-  transform: {},
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@tests/(.*)$': '<rootDir>/tests/$1'
-  },
-  testMatch: [
-    '**/tests/**/*.spec.(js|jsx)|**/__tests__/*.(js|jsx)'
-  ],
-  transformIgnorePatterns: ['/node_modules/'],
-  coverageReporters: ['json-summary', 'html'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!**/*.config.js',
@@ -21,14 +9,24 @@ module.exports = {
     '!**/public/**',
     '!**/coverage/**',
     '!**/tests/**',
-    '!**/dist/**'
+    '!**/dist/**',
   ],
+  coverageReporters: ['json-summary', 'html'],
   coverageThreshold: {
     global: {
-      statements: 0,
       branches: 0,
       functions: 0,
-      lines: 0
-    }
-  }
+      lines: 0,
+      statements: 0,
+    },
+  },
+  moduleFileExtensions: ['js', 'jsx', 'json'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@tests/(.*)$': '<rootDir>/tests/$1',
+  },
+  testEnvironment: 'node',
+  testMatch: ['**/tests/**/*.spec.(js|jsx)|**/__tests__/*.(js|jsx)'],
+  transform: {},
+  transformIgnorePatterns: ['/node_modules/'],
 };

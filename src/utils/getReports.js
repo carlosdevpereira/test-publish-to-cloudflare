@@ -10,14 +10,18 @@ async function GetReport({ reportUrl, retryCount = 3, ignoreErrors = false } = {
     return JSON.parse(body);
   } catch (error) {
     if (retryCount === 0) {
-      if (!ignoreErrors) throw error;
+      if (!ignoreErrors) {
+        throw error;
+      }
     } else {
       core.warning('Cloudflare pages request failed. Retrying...');
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      await new Promise((resolve) => {
+        return setTimeout(resolve, 2_500);
+      });
 
       return await GetReport({
         reportUrl,
-        retryCount: retryCount - 1
+        retryCount: retryCount - 1,
       });
     }
   }
@@ -28,13 +32,17 @@ function TotalPercentagesAverage(report) {
     report.total.lines.pct,
     report.total.statements.pct,
     report.total.functions.pct,
-    report.total.branches.pct
+    report.total.branches.pct,
   ];
 
-  return (percentages.reduce((a, b) => a + b, 0) / percentages.length);
+  return (
+    percentages.reduce((a, b) => {
+      return a + b;
+    }, 0) / percentages.length
+  );
 }
 
 module.exports = {
   GetReport,
-  TotalPercentagesAverage
+  TotalPercentagesAverage,
 };

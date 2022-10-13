@@ -1,5 +1,5 @@
-module.exports =  {
+module.exports = {
   testFramework: {
-    runTests: jest.fn()
-  }
+    runTests: jest.fn(),
+  },
 };

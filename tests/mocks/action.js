@@ -1,5 +1,5 @@
 module.exports = {
-  runTests: jest.fn(),
+  commentOnAvailablePullRequests: jest.fn(),
   publishToCloudflare: jest.fn(),
-  commentOnAvailablePullRequests: jest.fn()
+  runTests: jest.fn(),
 };

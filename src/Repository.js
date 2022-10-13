@@ -1,7 +1,7 @@
 const github = require('@actions/github');
 const Framework = require('./Framework');
-const { GetReport, TotalPercentagesAverage } = require('./utils/getReports');
 const { BuildCommentBody } = require('./utils/buildComment');
+const { GetReport, TotalPercentagesAverage } = require('./utils/getReports');
 
 class Repository {
   constructor(name, owner, config) {
@@ -17,23 +17,23 @@ class Repository {
   async getPullRequests() {
     const pullRequests = [];
     const { data: pulls } = await this.github.rest.search.issuesAndPullRequests({
-      q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`
+      q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`,
     });
 
-    for (let i = 0; i < pulls.items.length; i++) {
+    for (let index = 0; index < pulls.items.length; index++) {
       const { data: pullRequest } = await this.github.rest.pulls.get({
-        repo: this.name,
         owner: this.owner,
-        pull_number: pulls.items[i].number
+        pull_number: pulls.items[index].number,
+        repo: this.name,
       });
 
       pullRequests.push({
-        number: pullRequest.number,
-        headBranchSha: pullRequest.head.sha,
-        headBranchShortSha: pullRequest.head.sha.slice(0, 7),
         baseBranchSha: pullRequest.base.sha,
         baseBranchShortSha: pullRequest.base.sha.slice(0, 7),
-        baseRef: pullRequest.base.ref
+        baseRef: pullRequest.base.ref,
+        headBranchSha: pullRequest.head.sha,
+        headBranchShortSha: pullRequest.head.sha.slice(0, 7),
+        number: pullRequest.number,
       });
     }
 
@@ -42,48 +42,50 @@ class Repository {
 
   async commentPullRequest(pullRequest, testResults, fullReportUrl) {
     const { data: comments } = await this.github.rest.issues.listComments({
+      issue_number: pullRequest.number,
       owner: this.owner,
       repo: this.name,
-      issue_number: pullRequest.number
     });
-    const botComment = comments.find(comment => comment.user.id === 41898282);
+    const botComment = comments.find((comment) => {
+      return comment.user.id === 41_898_282;
+    });
 
-    const headResult = await GetReport({ reportUrl: `${fullReportUrl}/coverage-summary.json` });
-    const baseResult = await GetReport(
-      {
-        reportUrl: `https://${pullRequest.baseBranchShortSha}.${this.config.cloudflare.baseUrl}/coverage-summary.json`,
-        retryCount: 0,
-        ignoreErrors: true
-      }
-    );
+    const headResult = await GetReport({
+      reportUrl: `${fullReportUrl}/coverage-summary.json`,
+    });
+    const baseResult = await GetReport({
+      ignoreErrors: true,
+      reportUrl: `https://${pullRequest.baseBranchShortSha}.${this.config.cloudflare.baseUrl}/coverage-summary.json`,
+      retryCount: 0,
+    });
 
     const commentBody = await BuildCommentBody({
-      baseRef: pullRequest.baseRef,
-      branchName: this.branch,
-      headAvgPercentage: TotalPercentagesAverage(headResult),
       baseAvgPercentage: TotalPercentagesAverage(baseResult),
-      headTotals: headResult.total,
-      baseTotals: baseResult.total,
-      testResults,
-      headShortHash: pullRequest.headBranchShortSha,
+      baseRef: pullRequest.baseRef,
       baseShortHash: pullRequest.baseBranchShortSha,
+      baseTotals: baseResult.total,
+      branchName: this.branch,
       fullReportUrl,
-      hasBaseResults: !!baseResult
+      hasBaseResults: Boolean(baseResult),
+      headAvgPercentage: TotalPercentagesAverage(headResult),
+      headShortHash: pullRequest.headBranchShortSha,
+      headTotals: headResult.total,
+      testResults,
     });
 
     if (botComment) {
       await this.github.rest.issues.updateComment({
+        body: commentBody,
+        comment_id: botComment.id,
         owner: this.owner,
         repo: this.name,
-        comment_id: botComment.id,
-        body: commentBody
       });
     } else {
       await this.github.rest.issues.createComment({
+        body: commentBody,
         issue_number: pullRequest.number,
         owner: this.owner,
         repo: this.name,
-        body: commentBody
       });
     }
   }

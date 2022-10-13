@@ -6,19 +6,29 @@ const GithubAction = require('./Action');
 (async () => {
   try {
     const Action = new GithubAction(github.context, {
-      testing: {
-        framework: core.getInput('framework')
+      cloudflare: {
+        accountId: core.getInput('cloudflareAccountId', {
+          required: true,
+        }),
+        apiToken: core.getInput('cloudflareApiToken', {
+          required: true,
+        }),
+        baseUrl: core.getInput('baseCloudflareDeploymentUrl'),
+        projectName: core.getInput('cloudflareProjectName', {
+          required: true,
+        }),
       },
       github: {
-        token: core.getInput('githubToken', { required: true }),
-        branch: core.getInput('branchName', { required: true })
+        branch: core.getInput('branchName', {
+          required: true,
+        }),
+        token: core.getInput('githubToken', {
+          required: true,
+        }),
       },
-      cloudflare: {
-        projectName: core.getInput('cloudflareProjectName', { required: true }),
-        apiToken: core.getInput('cloudflareApiToken', { required: true }),
-        accountId: core.getInput('cloudflareAccountId', { required: true }),
-        baseUrl: core.getInput('baseCloudflareDeploymentUrl')
-      }
+      testing: {
+        framework: core.getInput('framework'),
+      },
     });
 
     core.startGroup('Running Jest Tests...');
@@ -32,7 +42,6 @@ const GithubAction = require('./Action');
     core.startGroup('Comment on available Pull Requests...');
     await Action.commentOnAvailablePullRequests();
     core.endGroup();
-
   } catch (error) {
     core.setFailed(error.message);
   }

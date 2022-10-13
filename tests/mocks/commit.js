@@ -1,3 +1,5 @@
 module.exports = {
-  shortHash: () => '1234'
+  shortHash: () => {
+    return '1234';
+  },
 };
