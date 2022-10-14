@@ -5,5 +5,7 @@ module.exports = {
       summary: require('@tests/fixtures/coverage-summary.json')
     })),
   },
-  addCommitComment: jest.fn()
+  addCommitComment: jest.fn(),
+  getPullRequests: jest.fn(() => require('@tests/fixtures/pull-requests.json')),
+  commentPullRequest: jest.fn()
 };

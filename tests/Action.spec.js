@@ -10,6 +10,7 @@ const Commit = require('@/Commit');
 const Repository = require('@/Repository');
 const githubActionContextFixture = require('@tests/fixtures/github-action-context.json');
 const githubActionConfigFixture = require('@tests/fixtures/github-action-config.json');
+const pullRequestsFixture = require('@tests/fixtures/pull-requests.json');
 
 describe('Action', () => {
   const GithubAction = require('@/Action');
@@ -23,13 +24,13 @@ describe('Action', () => {
     expect(Commit).toHaveBeenCalled();
   });
 
+  it('runs the unit tests from the test framework', async () => {
+    await action.runTests();
+
+    expect(mockRepository.testFramework.runTests).toHaveBeenCalled();
+  });
+
   describe('when running the unit tests', () => {
-    it('runs the unit tests from the test framework', async () => {
-      await action.runTests();
-
-      expect(mockRepository.testFramework.runTests).toHaveBeenCalled();
-    });
-
     it('adds the test results comment to the head commit', async () => {
       await action.saveTestResults();
 
@@ -40,11 +41,26 @@ describe('Action', () => {
     });
   });
 
-  describe('Publish results to cloudflare', () => {
-    it('tries to publish results from specific commit to cloudflare', async () => {
-      await action.publishToCloudflare();
+  it('tries to publish results from specific commit to cloudflare', async () => {
+    await action.publishToCloudflare();
 
-      expect(mockCloudflare.publish).toHaveBeenCalledWith(mockCommit.shortHash());
+    expect(mockCloudflare.publish).toHaveBeenCalledWith(mockCommit.shortHash());
+  });
+
+  describe('when commenting pull requests', () => {
+    beforeAll(async () => {
+      await action.commentOnAvailablePullRequests();
+    });
+
+    it('retrieves pull requests that can be commented on', () => {
+      expect(mockRepository.getPullRequests).toHaveBeenCalled();
+    });
+
+    it('tries to comment on retrieved pull requests', () => {
+      expect(mockRepository.commentPullRequest).toHaveBeenCalledWith(
+        pullRequestsFixture[0],
+        `https://${action.commit.shortHash()}.${githubActionConfigFixture.cloudflare.baseUrl}`
+      );
     });
   });
 });

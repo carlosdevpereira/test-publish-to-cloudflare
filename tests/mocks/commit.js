@@ -1,6 +1,8 @@
+const commit = require('@tests/fixtures/github-action-context.json');
+
 module.exports = {
-  hash: '13c988d4f15e06bcdd0b0af290086a3079cdadb0',
+  hash: commit.sha,
   shortHash: () => {
-    return '13c988d';
+    return commit.sha.slice(0, 7);
   },
 };
