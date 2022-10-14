@@ -1,0 +1,11 @@
+{
+  "sha": "the-commit-sha",
+  "payload": {
+    "repository": {
+      "name": "my-repository",
+      "owner": {
+        "login": "carlosdevpereira"
+      }
+    }
+  }
+}

@@ -1,17 +1,11 @@
 const mockAction = require('@tests/mocks/action');
 const mockGithubActionsCore = require('@tests/mocks/github-actions-core');
 
-jest.mock('@actions/core', () => {
-  return mockGithubActionsCore;
-});
-jest.mock('../src/Action', () => {
-  return jest.fn(() => {
-    return mockAction;
-  });
-});
+jest.mock('@actions/core', () => mockGithubActionsCore);
+jest.mock('@/Action', () => jest.fn(() => mockAction));
 
 const core = require('@actions/core');
-const GithubAction = require('../src/Action');
+const GithubAction = require('@/Action');
 
 const setupEnvironmentVariables = () => {
   process.env.INPUT_GITHUBTOKEN = '1234';
@@ -26,7 +20,7 @@ describe('Action Setup', () => {
     beforeAll(() => {
       setupEnvironmentVariables();
 
-      require('../src/index');
+      require('@/index');
     });
 
     it('checks if a github token was defined', () => {
@@ -64,7 +58,7 @@ describe('Action Setup', () => {
     beforeAll(async () => {
       setupEnvironmentVariables();
 
-      require('../src/index');
+      require('@/index');
     });
 
     it('initializes the github action instance', () => {
@@ -73,6 +67,10 @@ describe('Action Setup', () => {
 
     it('runs the unit tests of the project', () => {
       expect(mockAction.runTests).toHaveBeenCalled();
+    });
+
+    it('saves the test results', () => {
+      expect(mockAction.saveTestResults).toHaveBeenCalled();
     });
 
     it('publishes the results to cloudflare', () => {

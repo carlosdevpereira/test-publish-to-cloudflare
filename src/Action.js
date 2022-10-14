@@ -23,6 +23,13 @@ class Action {
     return this;
   }
 
+  async saveTestResults() {
+    await this.repository.addCommitComment(
+      this.commit.hash,
+      JSON.stringify(this.testResults)
+    );
+  }
+
   async publishToCloudflare() {
     const cloudflare = new Cloudflare(this.config.cloudflare);
     const commitShortHash = this.commit.shortHash();
@@ -35,11 +42,7 @@ class Action {
     const pullRequests = await this.repository.getPullRequests();
 
     for (const pullRequest of pullRequests) {
-      await this.repository.commentPullRequest(
-        pullRequest,
-        this.testResults,
-        this.coverageReportUrl
-      );
+      await this.repository.commentPullRequest(pullRequest, this.coverageReportUrl);
     }
 
     return this;

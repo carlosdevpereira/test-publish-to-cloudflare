@@ -1,0 +1,15 @@
+{
+  "cloudflare": {
+    "accountId": "1",
+    "apiToken": "1234",
+    "baseUrl": "project-base-url.pages.dev",
+    "projectName": "my-project"
+  },
+  "github": {
+    "branch": "main",
+    "token": "1234"
+  },
+  "testing": {
+    "framework": "jest"
+  }
+}

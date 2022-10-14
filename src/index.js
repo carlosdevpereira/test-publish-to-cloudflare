@@ -35,6 +35,10 @@ const GithubAction = require('./Action');
     await Action.runTests();
     core.endGroup();
 
+    core.startGroup('Saving test results...');
+    await Action.saveTestResults();
+    core.endGroup();
+
     core.startGroup('Uploading to Cloudflare Pages...');
     await Action.publishToCloudflare();
     core.endGroup();

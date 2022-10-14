@@ -1,7 +1,7 @@
 const github = require('@actions/github');
 const Framework = require('./Framework');
 const { BuildCommentBody } = require('./utils/buildComment');
-const { GetReport, TotalPercentagesAverage } = require('./utils/getReports');
+const { TotalPercentagesAverage } = require('./utils/getReports');
 
 class Repository {
   constructor(name, owner, config) {
@@ -40,7 +40,26 @@ class Repository {
     return pullRequests;
   }
 
-  async commentPullRequest(pullRequest, testResults, fullReportUrl) {
+  async addCommitComment(commitSha, comment) {
+    await this.github.rest.repos.createCommitComment({
+      owner: this.owner,
+      repo: this.name,
+      commit_sha: commitSha,
+      body: comment
+    });
+  }
+
+  async getCommitComment(commitSha) {
+    const comments = await this.github.rest.repos.listCommentsForCommit({
+      owner: this.owner,
+      repo: this.name,
+      commit_sha: commitSha
+    });
+
+    return comments.data[0].body;
+  }
+
+  async commentPullRequest(pullRequest, fullReportUrl) {
     const { data: comments } = await this.github.rest.issues.listComments({
       issue_number: pullRequest.number,
       owner: this.owner,
@@ -50,27 +69,22 @@ class Repository {
       return comment.user.id === 41_898_282;
     });
 
-    const headResult = await GetReport({
-      reportUrl: `${fullReportUrl}/coverage-summary.json`,
-    });
-    const baseResult = await GetReport({
-      ignoreErrors: true,
-      reportUrl: `https://${pullRequest.baseBranchShortSha}.${this.config.cloudflare.baseUrl}/coverage-summary.json`,
-      retryCount: 0,
-    });
+    // TODO: This can be parallelized
+    const headResult = JSON.parse(await this.getCommitComment(pullRequest.headBranchSha));
+    const baseResult = JSON.parse(await this.getCommitComment(pullRequest.baseBranchSha));
 
     const commentBody = await BuildCommentBody({
       baseAvgPercentage: TotalPercentagesAverage(baseResult),
       baseRef: pullRequest.baseRef,
       baseShortHash: pullRequest.baseBranchShortSha,
-      baseTotals: baseResult.total,
+      baseTotals: baseResult.summary.total,
       branchName: this.branch,
       fullReportUrl,
       hasBaseResults: Boolean(baseResult),
       headAvgPercentage: TotalPercentagesAverage(headResult),
       headShortHash: pullRequest.headBranchShortSha,
-      headTotals: headResult.total,
-      testResults,
+      headTotals: headResult.summary.total,
+      testResults: headResult.stats,
     });
 
     if (botComment) {

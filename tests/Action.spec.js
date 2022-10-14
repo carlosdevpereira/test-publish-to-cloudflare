@@ -2,54 +2,18 @@ const mockCloudflare = require('@tests/mocks/cloudflare');
 const mockCommit = require('@tests/mocks/commit');
 const mockRepository = require('@tests/mocks/repository');
 
-jest.mock('../src/Repository', () => {
-  return jest.fn(() => {
-    return mockRepository;
-  });
-});
-jest.mock('../src/Commit', () => {
-  return jest.fn(() => {
-    return mockCommit;
-  });
-});
-jest.mock('../src/Cloudflare', () => {
-  return jest.fn(() => {
-    return mockCloudflare;
-  });
-});
+jest.mock('@/Repository', () => jest.fn(() => mockRepository));
+jest.mock('@/Commit', () => jest.fn(() => mockCommit));
+jest.mock('@/Cloudflare', () => jest.fn(() => mockCloudflare));
 
-const Commit = require('../src/Commit');
-const Repository = require('../src/Repository');
+const Commit = require('@/Commit');
+const Repository = require('@/Repository');
+const githubActionContextFixture = require('@tests/fixtures/github-action-context.json');
+const githubActionConfigFixture = require('@tests/fixtures/github-action-config.json');
 
 describe('Action', () => {
-  const GithubAction = require('../src/Action');
-  const action = new GithubAction(
-    {
-      payload: {
-        repository: {
-          name: 'my-repository',
-          owner: {
-            login: 'carlosdevpereira',
-          },
-        },
-      },
-    },
-    {
-      cloudflare: {
-        accountId: '1',
-        apiToken: '1234',
-        baseUrl: 'project-base-url.pages.dev',
-        projectName: 'my-project',
-      },
-      github: {
-        branch: 'main',
-        token: '1234',
-      },
-      testing: {
-        framework: 'jest',
-      },
-    }
-  );
+  const GithubAction = require('@/Action');
+  const action = new GithubAction(githubActionContextFixture, githubActionConfigFixture);
 
   it('creates an instance of a repository', () => {
     expect(Repository).toHaveBeenCalled();
@@ -59,11 +23,20 @@ describe('Action', () => {
     expect(Commit).toHaveBeenCalled();
   });
 
-  describe('Runs unit tests', () => {
+  describe('when running the unit tests', () => {
     it('runs the unit tests from the test framework', async () => {
       await action.runTests();
 
       expect(mockRepository.testFramework.runTests).toHaveBeenCalled();
+    });
+
+    it('adds the test results comment to the head commit', async () => {
+      await action.saveTestResults();
+
+      expect(mockRepository.addCommitComment).toHaveBeenCalledWith(
+        mockCommit.hash,
+        JSON.stringify(action.testResults)
+      );
     });
   });
 
@@ -71,7 +44,7 @@ describe('Action', () => {
     it('tries to publish results from specific commit to cloudflare', async () => {
       await action.publishToCloudflare();
 
-      expect(mockCloudflare.publish).toHaveBeenCalledWith('1234');
+      expect(mockCloudflare.publish).toHaveBeenCalledWith(mockCommit.shortHash());
     });
   });
 });

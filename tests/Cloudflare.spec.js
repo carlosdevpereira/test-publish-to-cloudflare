@@ -6,7 +6,7 @@ jest.mock('shellac', () => {
 
 describe('Cloudflare', () => {
   const shellac = require('shellac').default;
-  const Cloudflare = require('../src/Cloudflare');
+  const Cloudflare = require('@/Cloudflare');
   const cloudflareInstance = new Cloudflare({
     accountId: 'account-id',
     apiToken: 'api-token',
