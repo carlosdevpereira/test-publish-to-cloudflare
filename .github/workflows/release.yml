@@ -13,7 +13,7 @@ jobs:
         node-version: [16]
 
     environment:
-      name: production
+      name: Production
       url: https://github.com/marketplace/actions/test-publish-to-cloudflare
 
     steps:
