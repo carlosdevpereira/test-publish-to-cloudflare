@@ -2,8 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const GithubAction = require('./Action');
 
-// 🚀 Execute Github Action
-(async () => {
+async function run() {
   try {
     const Action = new GithubAction(github.context, {
       cloudflare: {
@@ -49,4 +48,9 @@ const GithubAction = require('./Action');
   } catch (error) {
     core.setFailed(error.message);
   }
-})();
+}
+
+// 🚀 Execute Github Action
+run();
+
+module.exports = { run };

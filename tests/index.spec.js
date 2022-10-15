@@ -1,21 +1,21 @@
-const mockAction = require('@tests/mocks/action');
-const mockGithubActionsCore = require('@tests/mocks/github-actions-core');
+describe('Action Setup -> Happy path', () => {
+  const mockAction = require('@tests/mocks/action');
+  const mockGithubActionsCore = require('@tests/mocks/github-actions-core');
 
-jest.mock('@actions/core', () => mockGithubActionsCore);
-jest.mock('@/Action', () => jest.fn(() => mockAction));
+  jest.mock('@actions/core', () => mockGithubActionsCore);
+  jest.mock('@/Action', () => jest.fn(() => mockAction));
 
-const core = require('@actions/core');
-const GithubAction = require('@/Action');
+  const core = require('@actions/core');
+  const GithubAction = require('@/Action');
 
-const setupEnvironmentVariables = () => {
-  process.env.INPUT_GITHUBTOKEN = '1234';
-  process.env.INPUT_BRANCHNAME = 'master';
-  process.env.INPUT_CLOUDFLAREPROJECTNAME = 'my-cloudflare-project';
-  process.env.INPUT_CLOUDFLAREAPITOKEN = 'cloudflare-api-token';
-  process.env.INPUT_CLOUDFLAREACCOUNTID = 'cloudflare-account-id';
-};
+  const setupEnvironmentVariables = () => {
+    process.env.INPUT_GITHUBTOKEN = '1234';
+    process.env.INPUT_BRANCHNAME = 'master';
+    process.env.INPUT_CLOUDFLAREPROJECTNAME = 'my-cloudflare-project';
+    process.env.INPUT_CLOUDFLAREAPITOKEN = 'cloudflare-api-token';
+    process.env.INPUT_CLOUDFLAREACCOUNTID = 'cloudflare-account-id';
+  };
 
-describe('Action Setup', () => {
   describe('Requirements', () => {
     beforeAll(() => {
       setupEnvironmentVariables();
