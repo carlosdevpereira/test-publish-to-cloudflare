@@ -16,6 +16,8 @@ class Repository {
   }
 
   async getPullRequests() {
+    core.info('Searching for available pull requests...');
+
     const pullRequests = [];
     const { data: pulls } = await this.github.rest.search.issuesAndPullRequests({
       q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`,
@@ -38,6 +40,8 @@ class Repository {
       });
     }
 
+    core.info('Found ' + pullRequests.length + ' pull requests available for adding the coverage comment!');
+
     return pullRequests;
   }
 
@@ -59,14 +63,14 @@ class Repository {
     else {
       core.info('Creating a new commit comment...');
 
-      const createdComment = await this.github.rest.repos.createCommitComment({
+      await this.github.rest.repos.createCommitComment({
         owner: this.owner,
         repo: this.name,
         commit_sha: commitSha,
         body: comment
       });
 
-      core.info('Added comment `' + createdComment.id + '` to commit `' + commitSha + '`!');
+      core.info('Added comment to commit `' + commitSha + '`!');
     }
   }
 
@@ -129,6 +133,8 @@ class Repository {
         owner: this.owner,
         repo: this.name,
       });
+
+      core.info('Comment for pull request #`' + pullRequestNumber + '` updated successfully!');
     } else {
       core.info('Creating a new comment for pull request #`' + pullRequestNumber + '`...');
 
@@ -138,6 +144,8 @@ class Repository {
         owner: this.owner,
         repo: this.name,
       });
+
+      core.info('Comment for pull request #`' + pullRequestNumber + '` created successfully!');
     }
   }
 
