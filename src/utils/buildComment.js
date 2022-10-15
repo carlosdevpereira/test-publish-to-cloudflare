@@ -1,8 +1,8 @@
 const markdownTable = require('../lib/markdownTable').markdownTable;
 
 async function BuildCommentBody({
-  baseRef,
-  branchName,
+  baseBranchName,
+  headBranchName,
   headAvgPercentage,
   baseAvgPercentage,
   hasBaseResults,
@@ -15,8 +15,8 @@ async function BuildCommentBody({
 }) {
   const coverageMessage = BuildCommentHeadMessage({
     baseAvgPercentage,
-    baseRef,
-    branchName,
+    baseBranchName,
+    headBranchName,
     headAvgPercentage,
   });
 
@@ -48,9 +48,7 @@ ${coverageSummaryTable}
 - Time: **${timeTaken}**
 </details>
     
-> Coverage data is based on head **${branchName}** (\`${
-  (headShortHash, baseShortHash)
-}\`) compared to base **${baseRef}** (\`${baseShortHash}\`).
+> Coverage data is based on head branch **${headBranchName}** (\`${headShortHash}\`) compared to base branch **${baseBranchName}** (\`${baseShortHash}\`).
     
 [View full coverage report 🔗](${fullReportUrl})`;
 
@@ -58,26 +56,26 @@ ${coverageSummaryTable}
 }
 
 function BuildCommentHeadMessage({
-  baseRef,
-  branchName,
+  baseBranchName,
+  headBranchName,
   headAvgPercentage,
   baseAvgPercentage,
 }) {
   let coverageMessage;
 
   if (headAvgPercentage > baseAvgPercentage) {
-    coverageMessage = `> Wooo 🎉, the tests are passing and the coverage percentage **increased**, well done! 👏\n> ${baseRef}: **${Math.round(
+    coverageMessage = `> Wooo 🎉, the tests are passing and the coverage percentage **increased**, well done! 👏\n> ${baseBranchName}: **${Math.round(
       baseAvgPercentage,
       -1
-    )}%** | ${branchName}: **${Math.round(headAvgPercentage, -1)}%**`;
+    )}%** | ${headBranchName}: **${Math.round(headAvgPercentage, -1)}%**`;
   } else if (headAvgPercentage === baseAvgPercentage) {
     coverageMessage
       = '> Good job 👌, the tests are passing and the coverage percentage remained intact.';
   } else {
-    coverageMessage = `> Tests are passing but the coverage percentage **decreased** 😱, read coverage report below for more details.\n\n🔻 ${baseRef}: **${Math.round(
+    coverageMessage = `> Tests are passing but the coverage percentage **decreased** 😱, read coverage report below for more details.\n\n🔻 ${baseBranchName}: **${Math.round(
       baseAvgPercentage,
       -1
-    )}%** | ${branchName}: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
+    )}%** | ${headBranchName}: **${Math.round(headAvgPercentage, -1)}%** 🔻`;
   }
 
   return coverageMessage;

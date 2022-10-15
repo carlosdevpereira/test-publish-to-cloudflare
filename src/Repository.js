@@ -31,12 +31,13 @@ class Repository {
       });
 
       pullRequests.push({
+        number: pullRequest.number,
+        baseBranchName: pullRequest.base.ref,
         baseBranchSha: pullRequest.base.sha,
         baseBranchShortSha: pullRequest.base.sha.slice(0, 7),
-        baseRef: pullRequest.base.ref,
+        headBranchName: this.branch,
         headBranchSha: pullRequest.head.sha,
         headBranchShortSha: pullRequest.head.sha.slice(0, 7),
-        number: pullRequest.number,
       });
     }
 
@@ -102,17 +103,17 @@ class Repository {
     const baseResult = JSON.parse(results[1].body);
 
     const commentBody = await BuildCommentBody({
-      baseAvgPercentage: TotalPercentagesAverage(baseResult),
-      baseRef: pullRequest.baseRef,
+      baseBranchName: pullRequest.baseBranchName,
       baseShortHash: pullRequest.baseBranchShortSha,
-      baseTotals: baseResult.summary.total,
-      branchName: this.branch,
-      fullReportUrl,
       hasBaseResults: Boolean(baseResult),
-      headAvgPercentage: TotalPercentagesAverage(headResult),
+      baseTotals: baseResult.summary.total,
+      baseAvgPercentage: TotalPercentagesAverage(baseResult),
+      headBranchName: pullRequest.headBranchName,
       headShortHash: pullRequest.headBranchShortSha,
-      headTotals: headResult.summary.total,
       testResults: headResult.stats,
+      headAvgPercentage: TotalPercentagesAverage(headResult),
+      headTotals: headResult.summary.total,
+      fullReportUrl,
     });
 
     await this.addPullRequestComment(pullRequest.number, commentBody);
