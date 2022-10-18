@@ -132,7 +132,7 @@ const buildCommentHead = (results, baseBranch, headBranch) => {
 
 const buildCommentSummaryTable = async (results) => {
   let coverageSummaryTable = `\`\`\`diff
-  @@                        Coverage Summary                     @@\n  ---------------------------------------------------------------\n`;
+@@                        Coverage Summary                     @@\n  ---------------------------------------------------------------\n`;
 
   let mdTable = await markdownTable(
     [
@@ -257,11 +257,11 @@ const buildCommentBody = async ({
   const summaryTable = await buildCommentSummaryTable(results);
 
   const commentBody = `## 🔖 Coverage Report
+
+${headMessage}
   
-  ${headMessage}
-  
-  ${summaryTable}
-  
+${summaryTable}
+
   <details>
   <summary>Metrics</summary>
   
