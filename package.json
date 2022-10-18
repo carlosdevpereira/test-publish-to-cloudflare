@@ -10,7 +10,7 @@
   "scripts": {
     "build": "ncc build src/index.js -o dist --minify --license licenses.txt",
     "lint": "eslint . --fix",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --no-cache --detectOpenHandles",
+    "test": "jest --no-cache --detectOpenHandles",
     "test:ci:coverage": "jest --detectOpenHandles --no-cache --ci --json --coverage --runInBand --testLocationInResults --outputFile=coverage-report.json",
     "test:coverage": "jest --no-cache --detectOpenHandles --coverage"
   },
