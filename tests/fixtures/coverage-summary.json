@@ -3,7 +3,7 @@
     "lines": { "total": 147, "covered": 43, "skipped": 0, "pct": 29.25 },
     "statements": { "total": 148, "covered": 43, "skipped": 0, "pct": 29.05 },
     "functions": { "total": 27, "covered": 7, "skipped": 0, "pct": 25.92 },
-    "branches": { "total": 20, "covered": 0, "skipped": 0, "pct": 0 },
+    "branches": { "total": 20, "covered": 10, "skipped": 0, "pct": 50 },
     "branchesTrue": { "total": 0, "covered": 0, "skipped": 0, "pct": 100 }
   }
 }

@@ -1,3 +1,5 @@
 module.exports = {
-  markdownTable: jest.fn(),
+  markdownTable: jest.fn(async () => {
+    return '$markdown-table';
+  }),
 };

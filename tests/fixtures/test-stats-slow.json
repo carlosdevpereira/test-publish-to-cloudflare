@@ -41,7 +41,7 @@
           "title": "checks if a github token was defined"
         }
       ],
-      "endTime": 1665764075668,
+      "endTime": 1665768075668,
       "message": "",
       "name": "/Users/carlos.pereira/Documents/test-publish-to-cloudflare/tests/index.spec.js",
       "startTime": 1665764071463,

@@ -14,7 +14,7 @@ describe('Cloudflare', () => {
     projectName: 'project-name',
   });
 
-  it('returns an instance of a Commit', () => {
+  it('returns an instance of Cloudflare', () => {
     expect(cloudflareInstance.apiToken).toBe('api-token');
     expect(cloudflareInstance.accountId).toBe('account-id');
     expect(cloudflareInstance.projectName).toBe('project-name');

@@ -1,8 +1,8 @@
 const fs = require('node:fs');
 const exec = require('@actions/exec');
 
-const testResults = require('@tests/fixtures/test-stats.json');
-const coverageSummaryFixture = require('@tests/fixtures/coverage-summary.json');
+const testResults = require('@tests/fixtures/test-stats');
+const coverageSummaryFixture = require('@tests/fixtures/coverage-summary');
 
 jest.spyOn(fs, 'readFileSync').mockImplementation(() => JSON.stringify(coverageSummaryFixture));
 jest.spyOn(exec, 'exec').mockImplementation((commandToExecute, args, options) => {

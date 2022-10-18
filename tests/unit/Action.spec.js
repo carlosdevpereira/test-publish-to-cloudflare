@@ -8,9 +8,10 @@ jest.mock('@/Cloudflare', () => jest.fn(() => mockCloudflare));
 
 const Commit = require('@/Commit');
 const Repository = require('@/Repository');
-const githubActionContextFixture = require('@tests/fixtures/github-action-context.json');
-const githubActionConfigFixture = require('@tests/fixtures/github-action-config.json');
-const pullRequestsFixture = require('@tests/fixtures/pull-requests.json');
+
+const githubActionContextFixture = require('@tests/fixtures/github-action-context');
+const githubActionConfigFixture = require('@tests/fixtures/github-action-config');
+const pullRequestsFixture = require('@tests/fixtures/pull-requests');
 
 describe('Action', () => {
   const GithubAction = require('@/Action');
@@ -34,8 +35,7 @@ describe('Action', () => {
     it('adds the test results comment to the head commit', async () => {
       await action.saveTestResults();
 
-      expect(mockRepository.addCommitComment).toHaveBeenCalledWith(
-        mockCommit.hash,
+      expect(mockCommit.addComment).toHaveBeenCalledWith(
         JSON.stringify(action.testResults)
       );
     });
@@ -57,10 +57,11 @@ describe('Action', () => {
     });
 
     it('tries to comment on retrieved pull requests', () => {
-      expect(mockRepository.commentPullRequest).toHaveBeenCalledWith(
-        pullRequestsFixture[0],
-        `https://${action.commit.shortHash()}.${githubActionConfigFixture.cloudflare.baseUrl}`
-      );
+      expect(mockRepository.buildPullRequestCommentMock)
+        .toHaveBeenCalledWith(`https://${action.commit.shortHash()}.${githubActionConfigFixture.cloudflare.baseUrl}`);
+
+      expect(mockRepository.addPullRequestCommentMock)
+        .toHaveBeenCalledWith('pull-request-comment');
     });
   });
 });
