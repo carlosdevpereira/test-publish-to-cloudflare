@@ -1,3 +1,5 @@
+const github = require('@actions/github');
+
 const Cloudflare = require('./Cloudflare');
 const Commit = require('./Commit');
 const Repository = require('./Repository');
@@ -5,13 +7,10 @@ const Repository = require('./Repository');
 class Action {
   constructor(context, config) {
     this.config = config;
+    this.github = github.getOctokit(config.github.token);
 
-    this.repository = new Repository(
-      context.payload.repository.name,
-      context.payload.repository.owner.login,
-      config
-    );
-    this.commit = new Commit(context.sha, this.repository);
+    this.repository = new Repository(context.payload.repository.name, context.payload.repository.owner.login, this.github, config);
+    this.commit = new Commit(context.sha, this.repository, this.github);
 
     this.testResults = null;
     this.coverageReportUrl = null;
@@ -20,14 +19,11 @@ class Action {
   async runTests() {
     this.testResults = await this.repository.testFramework.runTests();
 
-    return this;
+    return this.testResults;
   }
 
   async saveTestResults() {
-    await this.repository.addCommitComment(
-      this.commit.hash,
-      JSON.stringify(this.testResults)
-    );
+    await this.commit.addComment(JSON.stringify(this.testResults));
   }
 
   async publishToCloudflare() {
@@ -35,17 +31,17 @@ class Action {
     const commitShortHash = this.commit.shortHash();
     this.coverageReportUrl = await cloudflare.publish(commitShortHash);
 
-    return this;
+    return this.coverageReportUrl;
   }
 
   async commentOnAvailablePullRequests() {
     const pullRequests = await this.repository.getPullRequests();
 
     for (const pullRequest of pullRequests) {
-      await this.repository.commentPullRequest(pullRequest, this.coverageReportUrl);
-    }
+      const comment = await pullRequest.buildComment(this.coverageReportUrl);
 
-    return this;
+      await pullRequest.addComment(comment);
+    }
   }
 }
 
