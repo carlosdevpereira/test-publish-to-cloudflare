@@ -10,10 +10,10 @@ class PullRequest {
     this.github = github;
 
     this.baseBranchName = pullRequest.base.ref;
-    this.baseCommit = new Commit(pullRequest.base.sha, repository);
+    this.baseCommit = new Commit(pullRequest.base.sha, repository, github);
 
     this.headBranchName = pullRequest.head.ref;
-    this.headCommit = new Commit(pullRequest.head.sha, repository);
+    this.headCommit = new Commit(pullRequest.head.sha, repository, github);
   }
 
   async getResults() {
