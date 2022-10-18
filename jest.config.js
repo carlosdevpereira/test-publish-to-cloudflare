@@ -29,4 +29,5 @@ module.exports = {
   testMatch: ['**/tests/**/*.spec.(js|jsx)|**/__tests__/*.(js|jsx)'],
   transform: {},
   transformIgnorePatterns: ['/node_modules/'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest-setup.js'],
 };

@@ -1,6 +1,5 @@
 const errorMessage = 'Unexpected error occurred';
 
-jest.mock('@actions/core', () => require('@tests/mocks/github-actions-core'));
 jest.mock('@/Action', () => jest.fn(() => {
   return {
     ...require('@tests/mocks/action'),

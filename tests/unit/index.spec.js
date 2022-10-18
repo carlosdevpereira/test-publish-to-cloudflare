@@ -1,11 +1,9 @@
+const core = require('@actions/core');
+
 describe('Action Setup -> Happy path', () => {
   const mockAction = require('@tests/mocks/action');
-  const mockGithubActionsCore = require('@tests/mocks/github-actions-core');
-
-  jest.mock('@actions/core', () => mockGithubActionsCore);
   jest.mock('@/Action', () => jest.fn(() => mockAction));
 
-  const core = require('@actions/core');
   const GithubAction = require('@/Action');
 
   const setupEnvironmentVariables = () => {
