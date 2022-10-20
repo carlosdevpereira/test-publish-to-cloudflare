@@ -3,20 +3,21 @@
 > This is a Github action that runs the unit tests of a repository, generates a test coverage report, uploads the report to Cloudflare Pages and comments the results on available pull requests.
 
 ## Requirements:
+
 1. A Javascript repository, hosted on Github, using Jest for unit testing
 2. A Cloudflare account with access to Cloudflare Pages and:
-    - A Cloudflare API Token
-    - The Cloudflare Account ID
-    - A Cloudflare Pages project (to upload coverage reports)
+   - A Cloudflare API Token
+   - The Cloudflare Account ID
+   - A Cloudflare Pages project (to upload coverage reports)
 
 ## How to use:
+
 In your repository, add the following step to your branch pushes workflow:
 
 ```yaml
     - name: Test & Publish to Cloudflare 🧪
         uses: carlosdevpereira/test-publish-to-cloudflare@v1
         with:
-          branchName: ${{ github.ref_name }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           cloudflareProjectName: THE_NAME_OF_YOUR_CLOUDFLARE_PROJECT
           cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -50,7 +51,6 @@ jobs:
       - name: Test & Publish to Cloudflare 🧪
         uses: carlosdevpereira/test-publish-to-cloudflare@v1
         with:
-          branchName: ${{ github.ref_name }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           cloudflareProjectName: THE_NAME_OF_YOUR_CLOUDFLARE_PROJECT
           cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -64,8 +64,6 @@ jobs:
 ### Expected parameters:
 
 - **framework**: Defines which testing framework this action should use to run the tests of your repository. For now the only valid value is `jest` but `vitest` support will be added soon.
-
-- **branchName**: The name of the branch that triggered the workflow. By default you may want the value of this parameter to be equal to the value of the context variable `github.ref_name`.
 
 - **githubToken**: The token that this action should use to authenticate requests to the Github API.
 

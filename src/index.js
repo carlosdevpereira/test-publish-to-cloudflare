@@ -18,9 +18,7 @@ async function run() {
         }),
       },
       github: {
-        branch: core.getInput('branchName', {
-          required: true,
-        }),
+        branch: github.context.ref.replace('refs/heads/', ''),
         token: core.getInput('githubToken', {
           required: true,
         }),

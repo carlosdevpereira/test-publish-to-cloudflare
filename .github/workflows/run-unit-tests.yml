@@ -37,7 +37,6 @@ jobs:
         uses: ./
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          branchName: ${{ github.ref_name }}
           cloudflareProjectName: test-publish-to-cloudflare
           cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
