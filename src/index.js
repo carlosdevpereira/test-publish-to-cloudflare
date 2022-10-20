@@ -4,8 +4,6 @@ const GithubAction = require('./Action');
 
 async function run() {
   try {
-    core.info('context:');
-    core.info(JSON.stringify(github.context));
     const Action = new GithubAction(github.context, {
       cloudflare: {
         accountId: core.getInput('cloudflareAccountId', {
@@ -20,7 +18,7 @@ async function run() {
         }),
       },
       github: {
-        branch: github.context.ref,
+        branch: github.context.ref.replace('refs/heads/', ''),
         token: core.getInput('githubToken', {
           required: true,
         }),
