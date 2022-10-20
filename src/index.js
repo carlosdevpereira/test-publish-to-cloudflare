@@ -4,6 +4,8 @@ const GithubAction = require('./Action');
 
 async function run() {
   try {
+    core.info('context:');
+    core.info(JSON.stringify(github.context));
     const Action = new GithubAction(github.context, {
       cloudflare: {
         accountId: core.getInput('cloudflareAccountId', {
