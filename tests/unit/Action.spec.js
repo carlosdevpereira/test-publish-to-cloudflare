@@ -11,7 +11,6 @@ const Repository = require('@/Repository');
 
 const githubActionContextFixture = require('@tests/fixtures/github-action-context');
 const githubActionConfigFixture = require('@tests/fixtures/github-action-config');
-const pullRequestsFixture = require('@tests/fixtures/pull-requests');
 
 describe('Action', () => {
   const GithubAction = require('@/Action');

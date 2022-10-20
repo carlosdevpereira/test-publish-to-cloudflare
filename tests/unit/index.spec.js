@@ -1,4 +1,5 @@
 const core = require('@actions/core');
+const context = require('@tests/fixtures/github-action-context');
 
 describe('Action Setup -> Happy path', () => {
   const mockAction = require('@tests/mocks/action');
@@ -8,7 +9,6 @@ describe('Action Setup -> Happy path', () => {
 
   const setupEnvironmentVariables = () => {
     process.env.INPUT_GITHUBTOKEN = '1234';
-    process.env.INPUT_BRANCHNAME = 'master';
     process.env.INPUT_CLOUDFLAREPROJECTNAME = 'my-cloudflare-project';
     process.env.INPUT_CLOUDFLAREAPITOKEN = 'cloudflare-api-token';
     process.env.INPUT_CLOUDFLAREACCOUNTID = 'cloudflare-account-id';
@@ -23,12 +23,6 @@ describe('Action Setup -> Happy path', () => {
 
     it('checks if a github token was defined', () => {
       expect(core.getInput).toHaveBeenCalledWith('githubToken', {
-        required: true,
-      });
-    });
-
-    it('checks if the head branch name was defined', () => {
-      expect(core.getInput).toHaveBeenCalledWith('branchName', {
         required: true,
       });
     });
@@ -61,6 +55,11 @@ describe('Action Setup -> Happy path', () => {
 
     it('initializes the github action instance', () => {
       expect(GithubAction).toHaveBeenCalled();
+      expect(GithubAction).toHaveBeenCalledWith(context, expect.objectContaining({
+        github: {
+          branch: 'github-branch-name'
+        }
+      }));
     });
 
     it('runs the unit tests of the project', () => {
