@@ -49,14 +49,14 @@ class Framework {
 }
 
 const parseTestResults = (testRunStats, coverageSummary) => {
-  const percentage = [
+  const percentage = Math.floor([
     coverageSummary.total.lines.pct,
     coverageSummary.total.statements.pct,
     coverageSummary.total.functions.pct,
     coverageSummary.total.branches.pct,
   ].reduce((a, b) => {
     return a + b;
-  }, 0) / 4;
+  }, 0) / 4);
 
   const summary = {
     statements: {
@@ -106,7 +106,7 @@ const parseTestResults = (testRunStats, coverageSummary) => {
   return {
     coverage: {
       summary,
-      percentage: parseFloat(`${percentage})`).toFixed(2),
+      percentage,
       badges: {
         coverage: createCoverageBadge(percentage),
         tests: createTestsBadge(stats.tests),
