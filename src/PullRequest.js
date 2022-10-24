@@ -235,6 +235,9 @@ const buildCommentBody = async ({
   timeTaken,
   coverageReportUrl
 }) => {
+  core.info('HEAD: ' + JSON.stringify(results.head));
+  core.info('BASE: ' + JSON.stringify(results.base));
+
   const headMessage = buildCommentHead(results, baseBranchName, headBranchName);
   const summaryTable = await buildCommentSummaryTable(results);
 

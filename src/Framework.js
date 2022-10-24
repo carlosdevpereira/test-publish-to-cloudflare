@@ -105,8 +105,8 @@ const parseTestResults = (testRunStats, coverageSummary) => {
 
   return {
     coverage: {
-      percentage,
       summary,
+      percentage: parseFloat(`${percentage})`).toFixed(2),
       badges: {
         coverage: createCoverageBadge(percentage),
         tests: createTestsBadge(stats.tests),
@@ -126,7 +126,7 @@ const createCoverageBadge = (percentage) => {
   else if (percentage >= 35) color = 'yellow';
   else color = 'red';
 
-  return `https://img.shields.io/badge/Coverage-${percentage}-${color}`;
+  return `https://img.shields.io/badge/Coverage-${percentage}%-${color}`;
 };
 
 const createTestsBadge = (tests) => {
