@@ -1,6 +1,5 @@
 const commit = require('@tests/fixtures/github-action-context');
-const testStatsFixture = require('@tests/fixtures/test-stats');
-const coverageSummaryFixture = require('@tests/fixtures/coverage-summary');
+const testResults = require('@tests/fixtures/test-results-schema');
 
 module.exports = {
   hash: commit.sha,
@@ -9,9 +8,6 @@ module.exports = {
   }),
   addComment: jest.fn(),
   getComment: jest.fn(() => ({
-    body: JSON.stringify({
-      stats: testStatsFixture,
-      summary: coverageSummaryFixture
-    })
+    body: JSON.stringify(testResults)
   }))
 };

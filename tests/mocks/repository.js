@@ -6,10 +6,7 @@ module.exports = {
   owner: 'carlosdevpereira',
 
   testFramework: {
-    runTests: jest.fn(() => ({
-      stats: require('@tests/fixtures/test-stats'),
-      summary: require('@tests/fixtures/coverage-summary')
-    })),
+    runTests: jest.fn(() => (require('@tests/fixtures/test-results-schema'))),
   },
 
   addCommitComment: jest.fn(),

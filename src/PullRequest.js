@@ -22,8 +22,8 @@ class PullRequest {
       this.headCommit.getComment(),
     ]);
 
-    const baseResult = JSON.parse(results[0].body);
-    const headResult = JSON.parse(results[1].body);
+    const baseResult = results[0] ? JSON.parse(results[0].body) : null;
+    const headResult = results[1] ? JSON.parse(results[1].body) : null;
 
     return {
       base: baseResult,
@@ -45,10 +45,11 @@ class PullRequest {
 
   async buildComment(coverageReportUrl) {
     const results = await this.getResults();
+    if (!results.head || !results.base) return null;
 
     const timeTaken = calculateTimeTaken(
       results.head.stats.startTime,
-      results.head.stats.testResults[results.head.stats.testResults.length - 1].endTime
+      results.head.stats.endTime
     );
 
     const comment = await buildCommentBody({
@@ -96,35 +97,17 @@ class PullRequest {
   }
 }
 
-const getResultAverage = (result) => {
-  const percentages = [
-    result.summary.total.lines.pct,
-    result.summary.total.statements.pct,
-    result.summary.total.functions.pct,
-    result.summary.total.branches.pct,
-  ];
-
-  return (
-    percentages.reduce((a, b) => {
-      return a + b;
-    }, 0) / percentages.length
-  );
-};
-
 const buildCommentHead = (results, baseBranch, headBranch) => {
-  const headCoverage = getResultAverage(results.head);
-  const baseCoverage = getResultAverage(results.base);
-
   let headMessage;
 
-  if (headCoverage > baseCoverage) {
+  if (results.head.coverage.percentage > results.base.coverage.percentage) {
     headMessage = '> Wooo 🎉, the tests are passing and the coverage percentage **increased**, well done! 👏\n';
-    headMessage += `> ${baseBranch}: **${Math.round(baseCoverage, -1)}%** | ${headBranch}: **${Math.round(headCoverage, -1)}%**`;
-  } else if (headCoverage === baseCoverage) {
+    headMessage += `> ${baseBranch}: **${Math.round(results.base.coverage.percentage, -1)}%** | ${headBranch}: **${Math.round(results.head.coverage.percentage, -1)}%**`;
+  } else if (results.head.coverage.percentage === results.base.coverage.percentage) {
     headMessage = '> Good job 👌, the tests are passing and the coverage percentage remained intact.';
   } else {
     headMessage = '> Tests are passing but the coverage percentage **decreased** 😱, read coverage report below for more details.\n\n';
-    headMessage += `🔻 ${baseBranch}: **${Math.round(baseCoverage, -1)}%** | ${headBranch}: **${Math.round(headCoverage, -1)}%** 🔻`;
+    headMessage += `🔻 ${baseBranch}: **${Math.round(results.base.coverage.percentage, -1)}%** | ${headBranch}: **${Math.round(results.head.coverage.percentage, -1)}%** 🔻`;
   }
 
   return headMessage;
@@ -139,27 +122,27 @@ const buildCommentSummaryTable = async (results) => {
       ['Category', 'Master Branch', 'Current Branch', 'Covered / Total'],
       [
         'Statements',
-        results.base.summary.total.statements.pct + '%',
-        results.head.summary.total.statements.pct + '%',
-        results.head.summary.total.statements.covered + '/' + results.head.summary.total.statements.total,
+        results.base.coverage.summary.statements.percentage + '%',
+        results.head.coverage.summary.statements.percentage + '%',
+        results.head.coverage.summary.statements.covered + '/' + results.head.coverage.summary.statements.total,
       ],
       [
         'Branches',
-        results.base.summary.total.branches.pct + '%',
-        results.head.summary.total.branches.pct + '%',
-        results.head.summary.total.branches.covered + '/' + results.head.summary.total.branches.total,
+        results.base.coverage.summary.branches.percentage + '%',
+        results.head.coverage.summary.branches.percentage + '%',
+        results.head.coverage.summary.branches.covered + '/' + results.head.coverage.summary.branches.total,
       ],
       [
         'Functions',
-        results.base.summary.total.functions.pct + '%',
-        results.head.summary.total.functions.pct + '%',
-        results.head.summary.total.functions.covered + '/' + results.head.summary.total.functions.total,
+        results.base.coverage.summary.functions.percentage + '%',
+        results.head.coverage.summary.functions.percentage + '%',
+        results.head.coverage.summary.functions.covered + '/' + results.head.coverage.summary.functions.total,
       ],
       [
         'Lines',
-        results.base.summary.total.lines.pct + '%',
-        results.head.summary.total.lines.pct + '%',
-        results.head.summary.total.lines.covered + '/' + results.head.summary.total.lines.total,
+        results.base.coverage.summary.lines.percentage + '%',
+        results.head.coverage.summary.lines.percentage + '%',
+        results.head.coverage.summary.lines.covered + '/' + results.head.coverage.summary.lines.total,
       ],
     ],
     {
@@ -178,29 +161,29 @@ const buildCommentSummaryTable = async (results) => {
     mdTable,
     'Statements',
     Boolean(results.base),
-    results.base.summary.total.statements.pct,
-    results.head.summary.total.statements.pct
+    results.base.coverage.summary.statements.pct,
+    results.head.coverage.summary.statements.pct
   );
   mdTable = highlightRow(
     mdTable,
     'Branches',
     Boolean(results.base),
-    results.base.summary.total.branches.pct,
-    results.head.summary.total.branches.pct
+    results.base.coverage.summary.branches.pct,
+    results.head.coverage.summary.branches.pct
   );
   mdTable = highlightRow(
     mdTable,
     'Functions',
     Boolean(results.base),
-    results.base.summary.total.functions.pct,
-    results.head.summary.total.functions.pct
+    results.base.coverage.summary.functions.pct,
+    results.head.coverage.summary.functions.pct
   );
   mdTable = highlightRow(
     mdTable,
     'Lines',
     Boolean(results.base),
-    results.base.summary.total.lines.pct,
-    results.head.summary.total.lines.pct
+    results.base.coverage.summary.lines.pct,
+    results.head.coverage.summary.lines.pct
   );
 
   coverageSummaryTable
@@ -253,6 +236,9 @@ const buildCommentBody = async ({
   timeTaken,
   coverageReportUrl
 }) => {
+  core.info('HEAD: ' + JSON.stringify(results.head));
+  core.info('BASE: ' + JSON.stringify(results.base));
+
   const headMessage = buildCommentHead(results, baseBranchName, headBranchName);
   const summaryTable = await buildCommentSummaryTable(results);
 
@@ -265,11 +251,11 @@ ${summaryTable}
   <details>
   <summary>Metrics</summary>
   
-  - Test Suites: **${results.head.stats.numPassedTestSuites} passed**, ${
-  results.head.stats.numTotalTestSuites
+  - Test Suites: **${results.head.stats.testSuites.passed} passed**, ${
+  results.head.stats.testSuites.total
 } total
-  - Tests: **${results.head.stats.numPassedTests} passed**, ${results.head.stats.numTotalTests} total
-  - Snapshots: **${results.head.stats.snapshot.total} total**
+  - Tests: **${results.head.stats.tests.passed} passed**, ${results.head.stats.tests.total} total
+  - Snapshots: **${results.head.stats.snapshots.total} total**
   - Time: **${timeTaken}**
   </details>
       
