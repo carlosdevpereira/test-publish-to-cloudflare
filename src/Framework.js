@@ -126,7 +126,7 @@ const createCoverageBadge = (percentage) => {
   else if (percentage >= 35) color = 'yellow';
   else color = 'red';
 
-  return `https://img.shields.io/badge/Coverage-${percentage}%-${color}`;
+  return `https://img.shields.io/badge/Coverage-${percentage}&#65130;-${color}`;
 };
 
 const createTestsBadge = (tests) => {
