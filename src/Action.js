@@ -44,7 +44,9 @@ class Action {
     for (const pullRequest of pullRequests) {
       const comment = await pullRequest.buildComment(this.coverageReportUrl);
 
-      await pullRequest.addComment(comment);
+      if (comment) {
+        await pullRequest.addComment(comment);
+      }
     }
   }
 }

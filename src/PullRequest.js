@@ -22,8 +22,8 @@ class PullRequest {
       this.headCommit.getComment(),
     ]);
 
-    const baseResult = JSON.parse(results[0].body);
-    const headResult = JSON.parse(results[1].body);
+    const baseResult = results[0] ? JSON.parse(results[0].body) : null;
+    const headResult = results[1] ? JSON.parse(results[1].body) : null;
 
     return {
       base: baseResult,
@@ -45,6 +45,7 @@ class PullRequest {
 
   async buildComment(coverageReportUrl) {
     const results = await this.getResults();
+    if (!results.head || !results.base) return null;
 
     const timeTaken = calculateTimeTaken(
       results.head.stats.startTime,
