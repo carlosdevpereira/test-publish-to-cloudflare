@@ -1,13 +1,16 @@
 const baseCommit = require('@tests/mocks/commit');
-const coverageSummaryDecreasedFixture = require('@tests/fixtures/coverage-summary-decreased');
-const testStatsFixture = require('@tests/fixtures/test-stats');
+const testResults = require('@tests/fixtures/test-results-schema');
 
 module.exports = {
   ...baseCommit,
+
   getComment: jest.fn(() => ({
     body: JSON.stringify({
-      stats: testStatsFixture,
-      summary: coverageSummaryDecreasedFixture
+      ...testResults,
+      coverage: {
+        ...testResults.coverage,
+        percentage: 5
+      }
     })
   }))
 };

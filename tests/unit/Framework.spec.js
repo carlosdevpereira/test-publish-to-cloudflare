@@ -3,6 +3,7 @@ const exec = require('@actions/exec');
 
 const testResults = require('@tests/fixtures/test-stats');
 const coverageSummaryFixture = require('@tests/fixtures/coverage-summary');
+const finalTestResultsSchema = require('@tests/fixtures/test-results-schema');
 
 jest.spyOn(fs, 'readFileSync').mockImplementation(() => JSON.stringify(coverageSummaryFixture));
 jest.spyOn(exec, 'exec').mockImplementation((commandToExecute, args, options) => {
@@ -35,10 +36,7 @@ describe('Framework -> Happy path', () => {
     it('reads the coverage summary and returns the test results', () => {
       expect(fs.readFileSync).toHaveBeenCalledWith('./coverage/coverage-summary.json', 'utf-8');
 
-      expect(results).toStrictEqual({
-        stats: testResults,
-        summary: coverageSummaryFixture
-      });
+      expect(results).toStrictEqual(finalTestResultsSchema);
     });
   });
 });

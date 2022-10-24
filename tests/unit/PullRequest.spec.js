@@ -5,6 +5,7 @@ const mockCommitIncreasedCoverage = require('@tests/mocks/commit-increased-cover
 const mockCommitDecreasedCoverage = require('@tests/mocks/commit-decreased-coverage');
 const mockMarkdownTable = require('@tests/mocks/markdown-table');
 
+const testResults = require('@tests/fixtures/test-results-schema');
 const testStatsFixture = require('@tests/fixtures/test-stats');
 const testStatsSlowFixture = require('@tests/fixtures/test-stats-slow');
 const coverageSummaryFixture = require('@tests/fixtures/coverage-summary');
@@ -36,8 +37,8 @@ describe('PullRequest', () => {
       const results = await pullRequestInstance.getResults();
 
       expect(results).toStrictEqual({
-        base: { stats: testStatsFixture, summary: coverageSummaryFixture },
-        head: { stats: testStatsFixture, summary: coverageSummaryFixture }
+        base: testResults,
+        head: testResults
       });
     });
   });
