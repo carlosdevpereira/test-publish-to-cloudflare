@@ -32,12 +32,12 @@ async function run() {
     await Action.runTests();
     core.endGroup();
 
-    core.startGroup('Saving test results...');
-    await Action.saveTestResults();
-    core.endGroup();
-
     core.startGroup('Uploading to Cloudflare Pages...');
     await Action.publishToCloudflare();
+    core.endGroup();
+
+    core.startGroup('Saving test results...');
+    await Action.saveTestResults();
     core.endGroup();
 
     core.startGroup('Comment on available Pull Requests...');
