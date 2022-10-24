@@ -28,7 +28,7 @@
       }
     },
     "badges": {
-      "coverage": "https://img.shields.io/badge/Coverage-33%-red",
+      "coverage": "https://img.shields.io/badge/Coverage-33&#65130;-red",
       "tests": "https://img.shields.io/badge/Tests-%E2%9C%94%2017%20%7C%20%E2%9C%98%200%20%7C%20%E2%8C%80%200-brightgreen"
     }
   },
