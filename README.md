@@ -1,5 +1,10 @@
 # Test & Publish to Cloudflare
 
+
+![Tests](https://github.com/carlosdevpereira/test-publish-to-cloudflare/actions/workflows/run-unit-tests.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/Coverage-90&#65130;-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-%E2%9C%94%2042%20%7C%20%E2%9C%98%200%20%7C%20%E2%8C%80%200-brightgreen)
+
 > This is a Github action that runs the unit tests of a repository, generates a test coverage report, uploads the report to Cloudflare Pages and comments the results on available pull requests.
 
 ## Requirements:
