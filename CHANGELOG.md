@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.4.0](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.4...v1.4.0) (2022-10-24)
+
+
+### ✨ Features
+
+* generate coverage badges and clean commit comments ([#22](https://github.com/carlosdevpereira/test-publish-to-cloudflare/issues/22)) ([3b0173c](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/3b0173cb72a41ce34f097a7d24fed055996421da))
+
+
+### 👷 Maintenance
+
+* add badges to README.md ([1e948f5](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/1e948f5d9772325e33c3b3915079e8e2dcc7f52c))
+* get branch that triggered workflow from context ([c90ef4a](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/c90ef4a8a177ec4d4af880af8b22ffa071b19c86))
+* log context ([fb32012](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/fb32012431e3e32cc16dad9b32e8fe34f7647233))
+* remove branchName from readme ([e38dcf0](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/e38dcf05cb6fd8d6f6e877fff62a46fe67b356e2))
+
+
+### 🚨 Bug Fixes
+
+* branch name ([209e73b](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/209e73b3ff692cc0ca1967fb40a1ee4d2a76610d))
+* broken tests ([2dd344b](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/2dd344b91e7560069c0868b7df350c893dba099d))
+* percentage sign ([694268f](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/694268fd948466d2fccc8f112ac60c412707767a))
+
 ## [1.3.4](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.3...v1.3.4) (2022-10-18)
 
 
