@@ -12,10 +12,6 @@ jobs:
       matrix:
         node-version: [16]
 
-    environment:
-      name: Production
-      url: https://github.com/marketplace/actions/test-publish-to-cloudflare
-
     steps:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.2
