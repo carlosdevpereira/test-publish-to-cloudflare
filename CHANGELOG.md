@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.5.0...v1.5.1) (2022-10-28)
+
+
+### 🚨 Bug Fixes
+
+* release publish ([27fc054](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/27fc054e50f585352f96926366414da8177bf1b1))
+* run tests ([8da1d57](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/8da1d577fc1b8c814b3d82c45ea67b905ec50bc1))
+
 ## [1.5.0](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.4.0...v1.5.0) (2022-10-28)
 
 
