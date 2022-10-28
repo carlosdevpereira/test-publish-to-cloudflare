@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.4.0...v1.5.0) (2022-10-28)
+
+
+### ✨ Features
+
+* add publish tag workflow ([362359a](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/362359ab8160856f97c69c1ba2df0ec9b61bfabd))
+* add publish tag workflow ([5009350](https://github.com/carlosdevpereira/test-publish-to-cloudflare/commit/50093502939ddc8ce7eea114644c9a96a764d47a))
+
 ## [1.4.0](https://github.com/carlosdevpereira/test-publish-to-cloudflare/compare/v1.3.4...v1.4.0) (2022-10-24)
 
 
