@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies 📦
         run: pnpm install
 
+      - name: Build action
+        run: pnpm build
+
       - name: Test & Publish to Cloudflare 🧪
         uses: ./
         with:
