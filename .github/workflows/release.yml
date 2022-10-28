@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - development
 
 name: Release
 jobs:
@@ -32,29 +32,3 @@ jobs:
           default-branch: main
           pull-request-title-pattern: "🚀 Release ${component} ${version}"
           changelog-types: '[{"type":"feat","section":"✨ Features","hidden":false},{"type":"fix","section":"🚨 Bug Fixes","hidden":false},{"type":"hotfix","section":"🚒 Hotfixes","hidden":false},{"type":"chore","section":"👷 Maintenance","hidden":false},{"type":"docs","section":"📚 Documentation","hidden":false}]'
-
-      - uses: actions/checkout@v3
-
-      - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-          cache-dependency-path: "./pnpm-lock.yaml"
-
-      - name: tag major and minor versions
-        if: ${{ steps.release.outputs.release_created }}
-        run: |
-          git config user.name carlosdevpereira
-          git config user.email carlos@carlosdevpereira.com
-          pnpm install && pnpm build
-          git add dist/** -f
-          git commit -m "chore: rebuild action"
-          git tag -d v${{ steps.release.outputs.major }} || true
-          git tag -d v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
-          git push origin :v${{ steps.release.outputs.major }} || true
-          git push origin :v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
-          git tag -a v${{ steps.release.outputs.major }} -m "Release v${{ steps.release.outputs.major }}"
-          git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}"
-          git push origin v${{ steps.release.outputs.major }} -f
-          git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} -f
