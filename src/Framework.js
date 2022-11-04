@@ -24,8 +24,8 @@ class Framework {
    * to use this action, feel free to open a feature request
    * in this repository 😉).
    */
-  async runTests() {
-    const JEST_PATH = 'node --experimental-vm-modules ./node_modules/jest/bin/jest.js';
+  async runTests(experimentalModules = false) {
+    const JEST_PATH = `node ${experimentalModules ? '--experimental-vm-modules' : ''} ./node_modules/jest/bin/jest.js`;
     const JEST_FLAGS = '--no-cache --detectOpenHandles --coverage --json';
 
     let testRunStats = '';

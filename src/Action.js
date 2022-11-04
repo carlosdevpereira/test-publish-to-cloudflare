@@ -17,7 +17,9 @@ class Action {
   }
 
   async runTests() {
-    this.testResults = await this.repository.testFramework.runTests();
+    this.testResults = await this.repository.testFramework.runTests(
+      this.config.testing.experimentalVmModules
+    );
 
     return this.testResults;
   }

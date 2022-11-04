@@ -25,6 +25,7 @@ async function run() {
       },
       testing: {
         framework: core.getInput('framework'),
+        experimentalVmModules: core.getInput('experimentalVmModules') === 'true'
       },
     });
 

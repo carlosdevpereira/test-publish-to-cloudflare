@@ -26,7 +26,7 @@ describe('Framework -> Happy path', () => {
   describe('runTests method', () => {
     let results;
     beforeAll(async () => {
-      results = await testingFrameworkInstance.runTests();
+      results = await testingFrameworkInstance.runTests(true);
     });
 
     it('executes the jest command with correct options', () => {

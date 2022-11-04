@@ -27,6 +27,8 @@ inputs:
     required: true
   baseCloudflareDeploymentUrl:
     description: "The base URL configured on the target Cloudflare project from which the deployments will be served - It can also be a custom domain configured on the target project. (defaults to https://${cloudflareProjectName}.pages.dev)"
+  experimentalVmModules:
+    description: "Defines if the action should run node with experimental-vm-modules support."
 
 outputs:
   coverage:

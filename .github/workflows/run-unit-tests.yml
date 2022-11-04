@@ -41,3 +41,4 @@ jobs:
           cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           baseCloudflareDeploymentUrl: test-publish-to-cloudflare.pages.dev
+          experimentalVmModules: true
