@@ -20,6 +20,7 @@ class Repository {
     core.info('Searching for available pull requests...');
 
     const pullRequests = [];
+    core.info('Owner: ' + this.owner + ' repo: ' + this.name + ' branch: ' + this.branch);
     const { data: pulls } = await this.github.rest.search.issuesAndPullRequests({
       q: `is:pr state:open repo:${this.owner}/${this.name} head:${this.branch}`,
     });

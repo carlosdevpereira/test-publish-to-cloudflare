@@ -1,3 +1,4 @@
+const core = require('@actions/core');
 const github = require('@actions/github');
 
 const Cloudflare = require('./Cloudflare');
@@ -9,6 +10,7 @@ class Action {
     this.config = config;
     this.github = github.getOctokit(config.github.token);
 
+    core.info('Github context: ' + JSON.stringify(context));
     this.repository = new Repository(context.payload.repository.name, context.payload.repository.owner.login, this.github, config);
     this.commit = new Commit(context.sha, this.repository, this.github);
 

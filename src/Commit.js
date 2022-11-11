@@ -37,16 +37,7 @@ class Commit {
     const commitComment = await this.getComment();
 
     if (commitComment) {
-      core.info('Updating existing commit comment `' + commitComment.id + '`...');
-
-      await this.github.rest.repos.updateCommitComment({
-        owner: this.repository.owner,
-        repo: this.repository.name,
-        comment_id: commitComment.id,
-        body: comment
-      });
-
-      core.info('Comment `' + commitComment.id + '` updated!');
+      core.info('Comment already exists with ID: `' + commitComment.id + '`. Skipping...');
     }
     else {
       core.info('Creating a new commit comment...');

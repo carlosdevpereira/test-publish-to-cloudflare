@@ -47,14 +47,8 @@ describe('Commit', () => {
         await commitInstance.addComment('commit-comment');
       });
 
-      it('updates the commit comment', () => {
-        expect(mockGithubApi.rest.repos.updateCommitComment)
-          .toHaveBeenCalledWith({
-            owner: commitInstance.repository.owner,
-            repo: commitInstance.repository.name,
-            comment_id: 1,
-            body: 'commit-comment'
-          });
+      it('skips comment creation', () => {
+        expect(mockGithubApi.rest.repos.createCommitComment).not.toHaveBeenCalled();
       });
     });
 
