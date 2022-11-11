@@ -12,7 +12,7 @@ class Action {
 
     core.info('Github context: ' + JSON.stringify(context));
     this.repository = new Repository(context.payload.repository.name, context.payload.repository.owner.login, this.github, config);
-    this.commit = new Commit(context.sha, this.repository, this.github);
+    this.commit = new Commit(github.context.payload.pull_request ? github.context.payload.pull_request.head.sha : context.sha, this.repository, this.github);
 
     this.testResults = null;
     this.coverageReportUrl = null;
