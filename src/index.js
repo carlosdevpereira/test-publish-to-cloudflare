@@ -18,7 +18,7 @@ async function run() {
         }),
       },
       github: {
-        branch: github.context.ref.replace('refs/heads/', ''),
+        branch: github.context.payload.pull_request ? github.context.payload.pull_request.head.ref : github.context.ref.replace('refs/heads/', ''),
         token: core.getInput('githubToken', {
           required: true,
         }),
